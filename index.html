@@ -3,15 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="screen-orientation" content="portrait">
-<meta name="x5-orientation" content="portrait">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-orientation" content="portrait">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-orientation" content="portrait">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-
-
 <title>MTAL</title>
 <link rel="manifest" href="manifest.json">
 <style>
@@ -24,17 +17,12 @@
     --bg-default: linear-gradient(135deg, #1e293b, #334155);
   }
 
-  * {
-    box-sizing: border-box;
-  }
-
   body {
     font-family: "Poppins", sans-serif;
     background: var(--bg-default);
     color: white;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
     align-items: center;
     min-height: 100vh;
     margin: 0;
@@ -43,39 +31,17 @@
     transition: background 1s ease;
   }
 
-  body.ders-zamani {
-    background: var(--bg-ders);
-  }
-
-  body.teneffus-zamani {
-    background: var(--bg-teneffus);
-  }
-
-  header {
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-    margin-bottom: 25px;
-  }
-
   header img {
     width: 200px;
     height: 200px;
     border-radius: 50%;
-    margin-bottom: 10px;
     box-shadow: 0 0 20px rgba(255,255,255,0.2);
-  }
-
-  header h1 {
-    font-size: 1.5em;
-    font-weight: 600;
-    letter-spacing: 0.5px;
-    text-shadow: 0 0 10px rgba(255,255,255,0.3);
+    margin-bottom: 10px;
   }
 
   .container {
     background: rgba(255, 255, 255, 0.12);
-    padding: 40px 50px;
+    padding: 35px 45px;
     border-radius: 25px;
     backdrop-filter: blur(15px);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
@@ -88,71 +54,40 @@
     to {opacity: 1; transform: translateY(0);}
   }
 
-  h2 {
-    font-size: 1.4em;
-    margin-top: 0;
-  }
+  h2 { margin-top: 0; }
+  .countdown { font-size: 2.4em; margin-top: 20px; font-weight: bold; }
+  .subinfo { font-size: 1.1em; margin-top: 8px; opacity: 0.9; }
+  .next { margin-top: 20px; font-size: 1.1em; background: rgba(255,255,255,0.1); padding: 12px 18px; border-radius: 15px; }
+  .time { font-size: 1.2em; margin-top: 20px; font-weight: 500; background: rgba(255,255,255,0.2); padding: 10px 20px; border-radius: 12px; }
+  footer { margin-top: 25px; font-size: 1em; opacity: 0.9; font-style: italic; }
 
-  .countdown {
-    font-size: 2.4em;
-    margin-top: 20px;
-    font-weight: bold;
-    color: #fff;
-    text-shadow: 0 0 10px rgba(255,255,255,0.3);
-  }
-
-  .subinfo {
-    font-size: 1.1em;
-    margin-top: 8px;
-    opacity: 0.9;
-  }
-
-  .next {
-    margin-top: 20px;
-    font-size: 1.1em;
-    background: rgba(255,255,255,0.1);
-    display: inline-block;
-    padding: 12px 18px;
-    border-radius: 15px;
-    box-shadow: 0 0 10px rgba(255,255,255,0.15);
-  }
-
-  .time {
-    font-size: 1.2em;
-    margin-top: 20px;
-    font-weight: 500;
-    background: rgba(255,255,255,0.2);
-    display: inline-block;
-    padding: 10px 20px;
-    border-radius: 12px;
-  }
-
-  footer {
+  /* 🍽 Yemek Alanı */
+  .yemek-container {
     margin-top: 25px;
-    font-size: 1em;
-    opacity: 0.9;
-    font-style: italic;
+    background: rgba(255,255,255,0.1);
+    padding: 15px 20px;
+    border-radius: 20px;
+    box-shadow: 0 0 15px rgba(255,255,255,0.1);
   }
 
-  @media (max-width: 600px) {
-    .container {
-      padding: 25px;
-    }
-    header h1 {
-      font-size: 1.2em;
-    }
-    .countdown { font-size: 2em; }
+  .yemek-container h3 {
+    margin: 0 0 10px;
+    font-size: 1.3em;
   }
-  @media screen and (orientation: landscape) {
-  body {
-    transform: rotate(-90deg);
-    transform-origin: center;
-    width: 100vh;
-    height: 100vw;
-    overflow: hidden;
-  }
-}
 
+  .yemek-listesi {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .yemek-listesi li {
+    background: rgba(255,255,255,0.15);
+    margin: 6px 0;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 1.1em;
+  }
 </style>
 </head>
 <body>
@@ -169,6 +104,12 @@
     <div class="time" id="currentTime"></div>
   </div>
 
+  <!-- 🍽 Yemek Listesi Alanı -->
+  <div class="yemek-container" id="yemekAlani">
+    <h3>Bugünün Öğle Yemeği</h3>
+    <ul class="yemek-listesi" id="yemekListesi"></ul>
+  </div>
+
   <footer>Developed By Yusuf AKGÜL</footer>
 
   <script>
@@ -177,16 +118,11 @@
     async function loadSchedule() {
       try {
         const response = await fetch('data.json');
-        if (!response.ok) {
-          throw new Error('Schedule yüklenemedi');
-        }
+        if (!response.ok) throw new Error('Schedule yüklenemedi');
         schedule = await response.json();
-        console.log('Ders programı başarıyla yüklendi');
         updateClock();
       } catch (error) {
-        console.error('Hata:', error);
         document.getElementById('status').textContent = '❌ Program Yüklenemedi';
-        document.getElementById('remaining').textContent = 'Ders programı dosyası bulunamadı.';
       }
     }
 
@@ -205,12 +141,10 @@
 
     function updateClock() {
       if (schedule.length === 0) return;
-
       const now = new Date();
       document.getElementById('currentTime').textContent = `🕒 Şu an: ${now.toLocaleTimeString('tr-TR')}`;
 
       let found = false;
-
       for (let i = 0; i < schedule.length; i++) {
         const start = parseTime(schedule[i].start);
         const end = parseTime(schedule[i].end);
@@ -222,12 +156,7 @@
           document.getElementById('countdown').textContent = formatTime(kalan);
           document.getElementById('lessonInfo').textContent = `Şu anda ${schedule[i].type} içindesiniz.`;
 
-          // Arkaplan rengini değiştir
-          if (schedule[i].label === 'Ders') {
-            document.body.className = 'ders-zamani';
-          } else {
-            document.body.className = 'teneffus-zamani';
-          }
+          document.body.className = (schedule[i].label === 'Ders') ? 'ders-zamani' : 'teneffus-zamani';
 
           if (i + 1 < schedule.length) {
             const nextStart = parseTime(schedule[i + 1].start);
@@ -253,17 +182,46 @@
       }
     }
 
-    loadSchedule().then(() => {
-      setInterval(updateClock, 1000);
-    });
-  </script>
-  <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js')
-      .then(() => console.log("Service Worker kaydedildi."))
-      .catch(err => console.log("SW Hatası:", err));
-  }
+    // 🍽 Yemek JSON yükle
+    async function loadMeals() {
+      try {
+        const response = await fetch("yemek.json");
+        if (!response.ok) throw new Error("Yemek verisi yok");
+        const data = await response.json();
+
+        const today = new Date();
+        const gun = today.getDate();
+        const ay = today.getMonth() + 1;
+        const yil = today.getFullYear();
+        const bugunStr = `${gun}.${ay}.${yil}`;
+
+        const kayit = data.find(x => x.tarih === bugunStr);
+        const liste = document.getElementById("yemekListesi");
+
+        if (kayit && kayit.ogle_yemegi) {
+          kayit.ogle_yemegi.forEach(yemek => {
+            const li = document.createElement("li");
+            li.textContent = yemek;
+            liste.appendChild(li);
+          });
+        } else {
+          liste.innerHTML = "<li>Bugün için yemek bilgisi bulunamadı.</li>";
+        }
+      } catch (err) {
+        console.error("Yemek yüklenemedi:", err);
+        document.getElementById("yemekListesi").innerHTML = "<li>Yemek listesi yüklenemedi.</li>";
+      }
+    }
+
+    // ⏰ Uygulamayı başlat
+    loadSchedule().then(() => setInterval(updateClock, 1000));
+    loadMeals();
   </script>
 
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+  }
+  </script>
 </body>
 </html>
