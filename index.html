@@ -6,9 +6,10 @@
 <title>Mimar İzzet Baysal MTAL - Ders ve Teneffüs Saati</title>
 <style>
   :root {
-    --primary: #1e40af;
-    --secondary: #3b82f6;
-    --bg: linear-gradient(135deg, #1e40af, #3b82f6);
+    --primary: #0f172a; /* Lacivert */
+    --secondary: #1e3a8a; /* Koyu mavi */
+    --accent: #ef4444; /* Kırmızı vurgular */
+    --bg: linear-gradient(135deg, #0f172a, #1e3a8a);
   }
 
   * {
@@ -20,24 +21,39 @@
     background: var(--bg);
     color: white;
     display: flex;
-    justify-content: center;
+    flex-direction: column;
+    justify-content: flex-start;
     align-items: center;
     min-height: 100vh;
     margin: 0;
-    flex-direction: column;
+    padding-top: 30px;
     text-align: center;
   }
 
   header {
-    font-size: 1.6em;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-bottom: 25px;
+  }
+
+  header img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    margin-bottom: 10px;
+    box-shadow: 0 0 20px rgba(255,255,255,0.2);
+  }
+
+  header h1 {
+    font-size: 1.5em;
     font-weight: 600;
-    margin-bottom: 20px;
     letter-spacing: 0.5px;
-    text-shadow: 0 0 10px rgba(255,255,255,0.4);
+    text-shadow: 0 0 10px rgba(255,255,255,0.3);
   }
 
   .container {
-    background: rgba(255, 255, 255, 0.15);
+    background: rgba(255, 255, 255, 0.12);
     padding: 40px 50px;
     border-radius: 25px;
     backdrop-filter: blur(15px);
@@ -51,13 +67,8 @@
     to {opacity: 1; transform: translateY(0);}
   }
 
-  h1 {
-    font-size: 2em;
-    margin-bottom: 10px;
-  }
-
   h2 {
-    font-size: 1.3em;
+    font-size: 1.4em;
     margin-top: 0;
   }
 
@@ -106,27 +117,29 @@
     .container {
       padding: 25px;
     }
-    header {
-      font-size: 1.3em;
+    header h1 {
+      font-size: 1.2em;
     }
-    h1 { font-size: 1.6em; }
     .countdown { font-size: 2em; }
   }
 </style>
 </head>
 <body>
-  <header>Mimar İzzet Baysal Mesleki ve Teknik Anadolu Lisesi</header>
+  <header>
+    <img src="87348b3b-97a8-4fe6-a8e9-cca8434bad69.png" alt="Mimar İzzet Baysal MTAL Logo">
+   
+  </header>
 
   <div class="container">
-    <h1 id="status"></h1>
-    <h2 id="remaining"></h2>
+    <h2 id="status"></h2>
+    <h3 id="remaining"></h3>
     <div class="countdown" id="countdown"></div>
     <div class="subinfo" id="lessonInfo"></div>
     <div class="next" id="nextLesson"></div>
     <div class="time" id="currentTime"></div>
   </div>
 
-  <footer>Developed by Yusuf AKGÜL</footer>
+  <footer>Hazırlayan: Yusuf AKGÜL — Bilişim Teknolojileri Öğretmeni</footer>
 
   <script>
     const schedule = [
@@ -179,7 +192,6 @@
           document.getElementById('countdown').textContent = formatTime(kalan);
           document.getElementById('lessonInfo').textContent = `Şu anda ${schedule[i].type} içindesiniz.`;
 
-          // Sıradaki zaman dilimi
           if (i + 1 < schedule.length) {
             const nextStart = parseTime(schedule[i + 1].start);
             const kalan2 = Math.floor((nextStart - now) / 1000);
