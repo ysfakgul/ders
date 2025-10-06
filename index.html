@@ -7,6 +7,11 @@
 <meta name="x5-orientation" content="portrait">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-orientation" content="portrait">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-orientation" content="portrait">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+
 <title>MTAL</title>
 <link rel="manifest" href="manifest.json">
 <style>
@@ -138,6 +143,16 @@
     }
     .countdown { font-size: 2em; }
   }
+  @media screen and (orientation: landscape) {
+  body {
+    transform: rotate(-90deg);
+    transform-origin: center;
+    width: 100vh;
+    height: 100vw;
+    overflow: hidden;
+  }
+}
+
 </style>
 </head>
 <body>
