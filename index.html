@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ders ve Teneffüs Saati</title>
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #4f46e5, #9333ea);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  .container {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 40px;
+    border-radius: 20px;
+    backdrop-filter: blur(10px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+  }
+  h1 {
+    font-size: 2.2em;
+    margin-bottom: 10px;
+  }
+  h2 {
+    font-size: 1.5em;
+    margin-top: 0;
+  }
+  .time {
+    font-size: 1.8em;
+    margin-top: 20px;
+  }
+  .subinfo {
+    font-size: 1.2em;
+    margin-top: 10px;
+    opacity: 0.9;
+  }
+</style>
+</head>
+<body>
+  <div class="container">
+    <h1 id="status"></h1>
+    <h2 id="remaining"></h2>
+    <div class="subinfo" id="lessonInfo"></div>
+    <div class="time" id="currentTime"></div>
+  </div>
+
+  <script>
+    const schedule = [
+      { type: '1. Ders', label: 'Ders', start: '08:45', end: '09:25' },
+      { type: '1. Teneffüs', label: 'Teneffüs', start: '09:25', end: '09:40' },
+      { type: '2. Ders', label: 'Ders', start: '09:40', end: '10:20' },
+      { type: '2. Teneffüs', label: 'Teneffüs', start: '10:20', end: '10:30' },
+      { type: '3. Ders', label: 'Ders', start: '10:30', end: '11:10' },
+      { type: '3. Teneffüs', label: 'Teneffüs', start: '11:10', end: '11:15' },
+      { type: '4. Ders', label: 'Ders', start: '11:15', end: '11:55' },
+      { type: '4. Teneffüs', label: 'Teneffüs', start: '11:55', end: '12:00' },
+      { type: '5. Ders', label: 'Ders', start: '12:00', end: '12:40' },
+      { type: 'Öğle Arası', label: 'Teneffüs', start: '12:40', end: '13:25' },
+      { type: '6. Ders', label: 'Ders', start: '13:25', end: '14:05' },
+      { type: '6. Teneffüs', label: 'Teneffüs', start: '14:05', end: '14:15' },
+      { type: '7. Ders', label: 'Ders', start: '14:15', end: '14:55' },
+      { type: '7. Teneffüs', label: 'Teneffüs', start: '14:55', end: '15:00' },
+      { type: '8. Ders', label: 'Ders', start: '15:00', end: '15:40' },
+      { type: '8. Teneffüs', label: 'Teneffüs', start: '15:40', end: '15:45' },
+      { type: '9. Ders', label: 'Ders', start: '15:45', end: '16:25' }
+    ];
+
+    function parseTime(str) {
+      const [h, m] = str.split(':').map(Number);
+      const d = new Date();
+      d.setHours(h, m, 0, 0);
+      return d;
+    }
+
+    function updateClock() {
+      const now = new Date();
+      document.getElementById('currentTime').textContent = `Şu anki saat: ${now.toLocaleTimeString('tr-TR')}`;
+
+      for (let i = 0; i < schedule.length; i++) {
+        const start = parseTime(schedule[i].start);
+        const end = parseTime(schedule[i].end);
+
+        if (now >= start && now <= end) {
+          const kalan = Math.floor((end - now) / 1000);
+          const dk = Math.floor(kalan / 60);
+          const sn = kalan % 60;
+
+          document.getElementById('status').textContent = `${schedule[i].label} Zamanı!`;
+          document.getElementById('remaining').textContent = `${schedule[i].type} bitmesine ${dk} dakika ${sn} saniye kaldı.`;
+          document.getElementById('lessonInfo').textContent = `Şu anda ${schedule[i].type} içindesiniz.`;
+          return;
+        }
+      }
+
+      document.getElementById('status').textContent = 'Şu anda ders programı dışında!';
+      document.getElementById('remaining').textContent = '';
+      document.getElementById('lessonInfo').textContent = '';
+    }
+
+    setInterval(updateClock, 1000);
+    updateClock();
+  </script>
+</body>
+</html>
