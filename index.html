@@ -10,7 +10,9 @@
     --primary: #0f172a;
     --secondary: #1e3a8a;
     --accent: #ef4444;
-    --bg: linear-gradient(135deg, #0f172a, #1e3a8a);
+    --bg-ders: linear-gradient(135deg, #0f172a, #1e3a8a);
+    --bg-teneffus: linear-gradient(135deg, #065f46, #059669);
+    --bg-default: linear-gradient(135deg, #1e293b, #334155);
   }
 
   * {
@@ -19,7 +21,7 @@
 
   body {
     font-family: "Poppins", sans-serif;
-    background: var(--bg);
+    background: var(--bg-default);
     color: white;
     display: flex;
     flex-direction: column;
@@ -29,6 +31,15 @@
     margin: 0;
     padding-top: 30px;
     text-align: center;
+    transition: background 1s ease;
+  }
+
+  body.ders-zamani {
+    background: var(--bg-ders);
+  }
+
+  body.teneffus-zamani {
+    background: var(--bg-teneffus);
   }
 
   header {
@@ -144,16 +155,15 @@
   <script>
     let schedule = [];
 
-    // JSON dosyasını yükle
     async function loadSchedule() {
       try {
-        const response = await fetch('data.json');
+        const response = await fetch('schedule.json');
         if (!response.ok) {
           throw new Error('Schedule yüklenemedi');
         }
         schedule = await response.json();
         console.log('Ders programı başarıyla yüklendi');
-        updateClock(); // İlk güncellemeyi yap
+        updateClock();
       } catch (error) {
         console.error('Hata:', error);
         document.getElementById('status').textContent = '❌ Program Yüklenemedi';
@@ -175,7 +185,7 @@
     }
 
     function updateClock() {
-      if (schedule.length === 0) return; // Program henüz yüklenmediyse çık
+      if (schedule.length === 0) return;
 
       const now = new Date();
       document.getElementById('currentTime').textContent = `🕒 Şu an: ${now.toLocaleTimeString('tr-TR')}`;
@@ -193,6 +203,13 @@
           document.getElementById('countdown').textContent = formatTime(kalan);
           document.getElementById('lessonInfo').textContent = `Şu anda ${schedule[i].type} içindesiniz.`;
 
+          // Arkaplan rengini değiştir
+          if (schedule[i].label === 'Ders') {
+            document.body.className = 'ders-zamani';
+          } else {
+            document.body.className = 'teneffus-zamani';
+          }
+
           if (i + 1 < schedule.length) {
             const nextStart = parseTime(schedule[i + 1].start);
             const kalan2 = Math.floor((nextStart - now) / 1000);
@@ -208,6 +225,7 @@
       }
 
       if (!found) {
+        document.body.className = '';
         document.getElementById('status').textContent = '📘 Program Dışı';
         document.getElementById('remaining').textContent = 'Şu anda ders programı dışında bir zamandasınız.';
         document.getElementById('countdown').textContent = '';
@@ -216,7 +234,6 @@
       }
     }
 
-    // Program yüklendikten sonra saat güncellemelerini başlat
     loadSchedule().then(() => {
       setInterval(updateClock, 1000);
     });
