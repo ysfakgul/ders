@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Mimar İzzet Baysal MTAL - Ders ve Teneffüs Saati</title>
+<title>MTAL</title>
+<link rel="manifest" href="manifest.json">
 <style>
   :root {
     --primary: #0f172a; /* Lacivert */
@@ -218,5 +219,13 @@
     setInterval(updateClock, 1000);
     updateClock();
   </script>
+  <script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js')
+      .then(() => console.log("Service Worker kaydedildi."))
+      .catch(err => console.log("SW Hatası:", err));
+  }
+</script>
+
 </body>
 </html>
