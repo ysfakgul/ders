@@ -78,6 +78,15 @@
     font-size: 1.1em;
   }
 
+  #okulKapali {
+    font-size: 2em;
+    margin-top: 25px;
+    color: #ffb703;
+    font-weight: 600;
+    text-shadow: 0 0 15px rgba(0,0,0,0.6);
+    display: none;
+  }
+
   footer {
     margin-top: 25px;
     font-size: 1em;
@@ -113,6 +122,8 @@
     <div class="time" id="currentTime"></div>
   </div>
 
+  <div id="okulKapali">🏫 Okul Kapalı</div>
+
   <div class="yemek-container">
     <h3>Bugünün Öğle Yemeği</h3>
     <ul class="yemek-listesi" id="yemekListesi"></ul>
@@ -146,8 +157,49 @@
 
   function updateClock() {
     if (schedule.length === 0) return;
+
     const now = new Date();
+    const gun = now.getDay(); // 0 = Pazar, 6 = Cumartesi
     document.getElementById('currentTime').textContent = `🕒 Şu an: ${now.toLocaleTimeString('tr-TR')}`;
+    const okulKapali = document.getElementById("okulKapali");
+    let found = false;
+
+    // 🏫 Hafta sonuysa doğrudan kapalı
+    if (gun === 0 || gun === 6) {
+      okulKapali.style.display = "block";
+      document.getElementById('status').textContent = "";
+      document.getElementById('remaining').textContent = "";
+      document.getElementById('countdown').textContent = "";
+      document.getElementById('lessonInfo').textContent = "";
+      document.getElementById('nextLesson').textContent = "";
+      return;
+    } else {
+      okulKapali.style.display = "none";
+    }
+
+    for (let i = 0; i < schedule.length; i++) {
+      const start = parseTime(schedule[i].start);
+      const end = parseTime(schedule[i].end);
+
+      if (now >= start && now <= end) {
+        found = true;
+        okulKapali.style.display = "none";
+        break;
+      }
+    }
+
+    // ⏱ Ders zamanları dışında ise "Okul Kapalı" yaz
+    if (!found) {
+      okulKapali.style.display = "block";
+      document.body.className = "";
+      document.getElementById('status').textContent = "📘 Program Dışı";
+      document.getElementById('remaining').textContent = "Şu anda ders programı dışında bir zamandasınız.";
+      document.getElementById('countdown').textContent = "";
+      document.getElementById('lessonInfo').textContent = "";
+      document.getElementById('nextLesson').textContent = "";
+    } else {
+      okulKapali.style.display = "none";
+    }
   }
 
   async function loadMeals() {
