@@ -3,52 +3,130 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ders ve Teneffüs Saati</title>
+<title>Mimar İzzet Baysal MTAL - Ders ve Teneffüs Saati</title>
 <style>
+  :root {
+    --primary: #1e40af;
+    --secondary: #3b82f6;
+    --bg: linear-gradient(135deg, #1e40af, #3b82f6);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
   body {
-    font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #4f46e5, #9333ea);
+    font-family: "Poppins", sans-serif;
+    background: var(--bg);
     color: white;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
-  }
-  .container {
+    flex-direction: column;
     text-align: center;
-    background: rgba(255, 255, 255, 0.15);
-    padding: 40px;
-    border-radius: 20px;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 8px 25px rgba(0,0,0,0.2);
   }
+
+  header {
+    font-size: 1.6em;
+    font-weight: 600;
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
+    text-shadow: 0 0 10px rgba(255,255,255,0.4);
+  }
+
+  .container {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 40px 50px;
+    border-radius: 25px;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+    max-width: 90%;
+    animation: fadeIn 0.8s ease;
+  }
+
+  @keyframes fadeIn {
+    from {opacity: 0; transform: translateY(20px);}
+    to {opacity: 1; transform: translateY(0);}
+  }
+
   h1 {
-    font-size: 2.2em;
+    font-size: 2em;
     margin-bottom: 10px;
   }
+
   h2 {
-    font-size: 1.5em;
+    font-size: 1.3em;
     margin-top: 0;
   }
-  .time {
-    font-size: 1.8em;
+
+  .countdown {
+    font-size: 2.4em;
     margin-top: 20px;
+    font-weight: bold;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255,255,255,0.3);
   }
+
   .subinfo {
-    font-size: 1.2em;
-    margin-top: 10px;
+    font-size: 1.1em;
+    margin-top: 8px;
     opacity: 0.9;
+  }
+
+  .next {
+    margin-top: 20px;
+    font-size: 1.1em;
+    background: rgba(255,255,255,0.1);
+    display: inline-block;
+    padding: 12px 18px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(255,255,255,0.15);
+  }
+
+  .time {
+    font-size: 1.2em;
+    margin-top: 20px;
+    font-weight: 500;
+    background: rgba(255,255,255,0.2);
+    display: inline-block;
+    padding: 10px 20px;
+    border-radius: 12px;
+  }
+
+  footer {
+    margin-top: 25px;
+    font-size: 1em;
+    opacity: 0.9;
+    font-style: italic;
+  }
+
+  @media (max-width: 600px) {
+    .container {
+      padding: 25px;
+    }
+    header {
+      font-size: 1.3em;
+    }
+    h1 { font-size: 1.6em; }
+    .countdown { font-size: 2em; }
   }
 </style>
 </head>
 <body>
+  <header>Mimar İzzet Baysal Mesleki ve Teknik Anadolu Lisesi</header>
+
   <div class="container">
     <h1 id="status"></h1>
     <h2 id="remaining"></h2>
+    <div class="countdown" id="countdown"></div>
     <div class="subinfo" id="lessonInfo"></div>
+    <div class="next" id="nextLesson"></div>
     <div class="time" id="currentTime"></div>
   </div>
+
+  <footer>Hazırlayan: Yusuf AKGÜL — Bilişim Teknolojileri Öğretmeni</footer>
 
   <script>
     const schedule = [
@@ -78,9 +156,17 @@
       return d;
     }
 
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
+    }
+
     function updateClock() {
       const now = new Date();
-      document.getElementById('currentTime').textContent = `Şu anki saat: ${now.toLocaleTimeString('tr-TR')}`;
+      document.getElementById('currentTime').textContent = `🕒 Şu an: ${now.toLocaleTimeString('tr-TR')}`;
+
+      let found = false;
 
       for (let i = 0; i < schedule.length; i++) {
         const start = parseTime(schedule[i].start);
@@ -88,19 +174,33 @@
 
         if (now >= start && now <= end) {
           const kalan = Math.floor((end - now) / 1000);
-          const dk = Math.floor(kalan / 60);
-          const sn = kalan % 60;
-
-          document.getElementById('status').textContent = `${schedule[i].label} Zamanı!`;
-          document.getElementById('remaining').textContent = `${schedule[i].type} bitmesine ${dk} dakika ${sn} saniye kaldı.`;
+          document.getElementById('status').textContent = `${schedule[i].label} Zamanı`;
+          document.getElementById('remaining').textContent = `${schedule[i].type} bitimine kaldı:`;
+          document.getElementById('countdown').textContent = formatTime(kalan);
           document.getElementById('lessonInfo').textContent = `Şu anda ${schedule[i].type} içindesiniz.`;
-          return;
+
+          // Sıradaki zaman dilimi
+          if (i + 1 < schedule.length) {
+            const nextStart = parseTime(schedule[i + 1].start);
+            const kalan2 = Math.floor((nextStart - now) / 1000);
+            document.getElementById('nextLesson').textContent =
+              `⏭ Sıradaki ${schedule[i + 1].type} ${schedule[i + 1].start}'da başlayacak (${formatTime(kalan2)} sonra)`;
+          } else {
+            document.getElementById('nextLesson').textContent = '🎉 Günün sonuna geldiniz!';
+          }
+
+          found = true;
+          break;
         }
       }
 
-      document.getElementById('status').textContent = 'Şu anda ders programı dışında!';
-      document.getElementById('remaining').textContent = '';
-      document.getElementById('lessonInfo').textContent = '';
+      if (!found) {
+        document.getElementById('status').textContent = '📘 Program Dışı';
+        document.getElementById('remaining').textContent = 'Şu anda ders programı dışında bir zamandasınız.';
+        document.getElementById('countdown').textContent = '';
+        document.getElementById('lessonInfo').textContent = '';
+        document.getElementById('nextLesson').textContent = '';
+      }
     }
 
     setInterval(updateClock, 1000);
