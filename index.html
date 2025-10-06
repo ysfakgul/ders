@@ -7,26 +7,24 @@
 <meta name="apple-mobile-web-app-orientation" content="portrait">
 <meta name="theme-color" content="#1e3a8a">
 <title>Mimar İzzet Baysal MTAL</title>
-<link rel="manifest" href="manifest.json?v=2">
+<link rel="manifest" href="manifest.json?v=4">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
 <style>
   :root {
-    --bg-ders: linear-gradient(135deg, #0f172a, #1e3a8a);
-    --bg-teneffus: linear-gradient(135deg, #065f46, #059669);
-    --bg-default: linear-gradient(135deg, #1e293b, #334155);
-    --neon-color: #ffd700;
+    --neon-color: #ffdd40;
+    --bg-gradient: linear-gradient(135deg, #0f172a, #1e3a8a);
   }
 
   html, body {
     font-family: "Poppins", sans-serif;
     color: white;
-    background: var(--bg-default);
+    background: var(--bg-gradient);
     margin: 0;
     padding: 0;
     height: 100%;
-    overflow: hidden; /* Scroll tamamen kapatıldı ✅ */
+    overflow: hidden; /* scroll tamamen devre dışı */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -35,11 +33,17 @@
   }
 
   header img {
-    width: 200px;
-    height: 200px;
+    width: 180px;
+    height: 180px;
     border-radius: 50%;
-    box-shadow: 0 0 20px rgba(255,255,255,0.2);
     margin-top: 20px;
+    box-shadow: 0 0 25px rgba(255,255,255,0.3);
+    animation: floatLogo 4s ease-in-out infinite alternate;
+  }
+
+  @keyframes floatLogo {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
   }
 
   .container {
@@ -54,9 +58,8 @@
   }
 
   .countdown { font-size: 2.2em; font-weight: bold; margin-top: 15px; }
-  .subinfo { font-size: 1.1em; margin-top: 5px; opacity: 0.9; }
   .next { margin-top: 15px; font-size: 1.1em; background: rgba(255,255,255,0.1); padding: 10px 16px; border-radius: 15px; }
-  .time { font-size: 1.2em; margin-top: 15px; font-weight: 500; background: rgba(255,255,255,0.2); padding: 8px 14px; border-radius: 12px; }
+  .time { font-size: 1.1em; margin-top: 15px; background: rgba(255,255,255,0.2); padding: 8px 14px; border-radius: 10px; }
 
   .yemek-container {
     margin-top: 10px;
@@ -78,36 +81,50 @@
     font-size: 1em;
   }
 
-  /* 🏫 Okul Kapalı */
+  /* 🏫 OKUL KAPALI ekranı */
   #okulKapali {
     position: fixed;
     inset: 0;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     font-size: 3em;
     font-weight: 700;
     text-align: center;
     color: var(--neon-color);
-    text-shadow: 0 0 8px var(--neon-color),
+    text-shadow: 0 0 10px var(--neon-color),
                  0 0 20px var(--neon-color),
-                 0 0 30px #ffec8b,
-                 0 0 40px #ffe766;
-    background: rgba(0, 0, 0, 0.85);
-    backdrop-filter: blur(10px);
-    z-index: 1000;
-    animation: neonPulse 1.5s infinite alternate;
+                 0 0 40px #fffec5,
+                 0 0 60px #ffec8b;
+    background: linear-gradient(135deg, #0a0f24, #1a237e, #003b5c);
+    background-size: 300% 300%;
+    animation: bgShift 6s ease-in-out infinite, neonPulse 1.5s infinite alternate;
+    z-index: 999;
     display: none;
   }
 
+  @keyframes bgShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
   @keyframes neonPulse {
-    from { text-shadow: 0 0 8px var(--neon-color), 0 0 20px var(--neon-color); opacity: 0.8; }
-    to { text-shadow: 0 0 30px var(--neon-color), 0 0 60px #fff8dc; opacity: 1; }
+    from { text-shadow: 0 0 10px var(--neon-color), 0 0 20px var(--neon-color); opacity: 0.85; }
+    to { text-shadow: 0 0 40px var(--neon-color), 0 0 80px #fffde0; opacity: 1; }
+  }
+
+  #okulKapali small {
+    font-size: 0.4em;
+    font-weight: 400;
+    opacity: 0.8;
+    margin-top: 10px;
   }
 
   footer {
     margin-top: auto;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
     font-size: 0.9em;
     opacity: 0.8;
     font-style: italic;
@@ -133,9 +150,7 @@
 
   <div class="container">
     <h2 id="status"></h2>
-    <h3 id="remaining"></h3>
     <div class="countdown" id="countdown"></div>
-    <div class="subinfo" id="lessonInfo"></div>
     <div class="next" id="nextLesson"></div>
     <div class="time" id="currentTime"></div>
   </div>
@@ -145,8 +160,10 @@
     <ul class="yemek-listesi" id="yemekListesi"></ul>
   </div>
 
-  <!-- 🏫 Okul Kapalı tam ekran -->
-  <div id="okulKapali">🏫 OKUL KAPALI</div>
+  <div id="okulKapali">
+    🏫 OKUL KAPALI
+    <small>Güzel bir gün geçir!</small>
+  </div>
 
   <div id="updateBanner">🔄 Yeni sürüm mevcut! <button onclick="refreshApp()">Yenile</button></div>
   <footer>Developed By Yusuf AKGÜL</footer>
@@ -155,7 +172,7 @@
   let schedule = [];
 
   async function loadSchedule() {
-    const response = await fetch('data.json?v=3');
+    const response = await fetch('data.json?v=4');
     schedule = await response.json();
     updateClock();
   }
@@ -177,17 +194,40 @@
     if (schedule.length === 0) return;
     const now = new Date();
     const gun = now.getDay(); // 0 = Pazar, 6 = Cumartesi
-    document.getElementById('currentTime').textContent = `🕒 Şu an: ${now.toLocaleTimeString('tr-TR')}`;
     const okulKapali = document.getElementById("okulKapali");
-    let found = false;
-
-    // 🏫 Hafta sonu veya mesai dışında
+    const countdown = document.getElementById("countdown");
+    const status = document.getElementById("status");
+    document.getElementById('currentTime').textContent = `🕒 Şu an: ${now.toLocaleTimeString('tr-TR')}`;
+    
+    // Hafta sonu doğrudan kapalı
     if (gun === 0 || gun === 6) {
       okulKapali.style.display = "flex";
-      document.body.className = "";
+      status.textContent = "";
+      countdown.textContent = "";
       return;
     }
 
+    const ilkDers = parseTime(schedule[0].start);
+    const sonDers = parseTime(schedule[schedule.length - 1].end);
+
+    // Sabah 08:00 öncesi: ilk derse geri sayım
+    const sabahSekiz = new Date();
+    sabahSekiz.setHours(8, 0, 0, 0);
+
+    if (now < sabahSekiz) {
+      const fark = Math.floor((ilkDers - now) / 1000);
+      if (fark > 0) {
+        const m = Math.floor(fark / 60);
+        const s = fark % 60;
+        okulKapali.style.display = "none";
+        status.textContent = "İlk derse kalan süre:";
+        countdown.textContent = `${m} dk ${s} sn`;
+      }
+      return;
+    }
+
+    // Ders saatleri içinde mi?
+    let found = false;
     for (let i = 0; i < schedule.length; i++) {
       const start = parseTime(schedule[i].start);
       const end = parseTime(schedule[i].end);
@@ -198,16 +238,16 @@
       }
     }
 
-    if (!found) {
+    // Son dersten sonra
+    if (!found && now > sonDers) {
       okulKapali.style.display = "flex";
-      document.body.className = "";
-    } else {
-      okulKapali.style.display = "none";
+      status.textContent = "";
+      countdown.textContent = "";
     }
   }
 
   async function loadMeals() {
-    const response = await fetch("yemek.json?v=3");
+    const response = await fetch("yemek.json?v=4");
     const data = await response.json();
     const today = new Date();
     const gun = today.getDate();
@@ -231,9 +271,9 @@
   loadMeals();
   setInterval(updateClock, 1000);
 
-  // 🔄 Service Worker güncelleme bildirimi
+  // SW güncelleme bildirimi
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js?v=3").then(reg => {
+    navigator.serviceWorker.register("sw.js?v=4").then(reg => {
       reg.addEventListener("updatefound", () => {
         const newWorker = reg.installing;
         newWorker.addEventListener("statechange", () => {
