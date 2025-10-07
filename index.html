@@ -867,6 +867,7 @@
         kayit.ogle_yemegi.forEach(yemek => {
           const li = document.createElement("li");
           li.textContent = yemek;
+          li.onclick = () => showYemekImage(yemek);
           liste.appendChild(li);
         });
       } else {
@@ -876,6 +877,99 @@
       console.error("Yemek listesi yükleme hatası:", error);
       document.getElementById("yemekListesi").innerHTML = `<li>Yemek listesi yüklenemedi: ${error.message}</li>`;
     }
+  }
+
+  async function showYemekImage(yemekAdi) {
+    const container = document.getElementById('yemekImageContainer');
+    const img = document.getElementById('yemekImage');
+    const loading = document.getElementById('imageLoading');
+    
+    container.classList.add('show');
+    img.style.display = 'none';
+    loading.style.display = 'block';
+    loading.textContent = '🍽️ Görsel yükleniyor...';
+    
+    try {
+      // Yemek adını İngilizce'ye çevir (basit sözlük)
+      const yemekSozluk = {
+        'çorba': 'soup',
+        'corbası': 'soup',
+        'sebze': 'vegetable',
+        'patates': 'potato',
+        'bulgur': 'bulgur',
+        'cacık': 'cacik',
+        'ezogelin': 'ezogelin soup',
+        'tavuk': 'chicken',
+        'sote': 'saute',
+        'pirinç': 'rice',
+        'pilav': 'pilaf',
+        'pilavı': 'pilaf',
+        'ayran': 'ayran',
+        'yayla': 'yayla soup',
+        'et': 'meat',
+        'komposto': 'compote',
+        'mercimek': 'lentil',
+        'külbastı': 'grilled meat',
+        'kuru fasulye': 'beans',
+        'meyhane': 'pilaf',
+        'köfte': 'meatball',
+        'tarhana': 'tarhana',
+        'mantı': 'manti',
+        'salata': 'salad',
+        'tatlı': 'dessert',
+        'şehriye': 'vermicelli',
+        'pırasa': 'leek',
+        'makarna': 'pasta',
+        'yoğurt': 'yogurt',
+        'domates': 'tomato',
+        'barbunya': 'beans',
+        'ıspanak': 'spinach',
+        'fırın': 'oven baked',
+        'nohut': 'chickpea',
+        'döner': 'doner',
+        'türlü': 'vegetable stew',
+        'mantar': 'mushroom'
+      };
+      
+      let searchTerm = yemekAdi.toLowerCase();
+      
+      // Sözlükten çeviri yap
+      for (let [tr, en] of Object.entries(yemekSozluk)) {
+        if (searchTerm.includes(tr)) {
+          searchTerm = en;
+          break;
+        }
+      }
+      
+      // Eğer çeviri bulunamadıysa genel "turkish food" kullan
+      if (searchTerm === yemekAdi.toLowerCase()) {
+        searchTerm = 'turkish food';
+      }
+      
+      console.log('Aranan yemek:', searchTerm);
+      
+      // Lorem Picsum ile yemek görseli (her seferinde farklı)
+      const randomSeed = encodeURIComponent(searchTerm + Date.now());
+      const imageUrl = `https://picsum.photos/seed/${randomSeed}/400/300`;
+      
+      img.src = imageUrl;
+      img.onload = () => {
+        loading.style.display = 'none';
+        img.style.display = 'block';
+      };
+      img.onerror = () => {
+        loading.textContent = '❌ Görsel yüklenemedi';
+      };
+      
+    } catch (error) {
+      console.error('Görsel yükleme hatası:', error);
+      loading.textContent = '❌ Görsel yüklenemedi';
+    }
+  }
+
+  function closeYemekImage() {
+    const container = document.getElementById('yemekImageContainer');
+    container.classList.remove('show');
   }
 
   async function loadNobetci() {
