@@ -210,17 +210,25 @@
     const ilkDers = parseTime(schedule[0].start);
     const sonDers = parseTime(schedule[schedule.length - 1].end);
 
-    // Sabah 08:00 öncesi: ilk derse geri sayım
-    const sabahSekiz = new Date();
-    sabahSekiz.setHours(8, 0, 0, 0);
+    // İlk derse 60 dakika öncesinden başla
+    const ilkDersOncesi60dk = new Date(ilkDers.getTime() - 60 * 60 * 1000); // 60 dakika öncesi
 
-    if (now < sabahSekiz) {
+    if (now < ilkDersOncesi60dk) {
+      // Henüz 60 dakika öncesine bile gelmediyse okul kapalı göster
+      okulKapali.style.display = "flex";
+      status.textContent = "";
+      countdown.textContent = "";
+      return;
+    }
+
+    if (now < ilkDers) {
+      // İlk derse 60 dakika veya daha az kaldıysa geri sayım göster
       const fark = Math.floor((ilkDers - now) / 1000);
       if (fark > 0) {
         const m = Math.floor(fark / 60);
         const s = fark % 60;
         okulKapali.style.display = "none";
-        status.textContent = "İlk derse kalan süre:";
+        status.textContent = "1. Derse kalan süre:";
         countdown.textContent = `${m} dk ${s} sn`;
       }
       return;
