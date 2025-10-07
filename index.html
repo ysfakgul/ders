@@ -884,13 +884,12 @@ async function showYemekImage(yemekAdi) {
   const img = document.getElementById('yemekImage');
   const loading = document.getElementById('imageLoading');
 
-  // Görsel alanını hazırla
   container.classList.add('show');
   img.style.display = 'none';
   loading.style.display = 'block';
   loading.textContent = '🍽️ Google Görseller aranıyor...';
 
-  // Türkçe karakterleri normalize et
+  // 🔠 Türkçe karakterleri normalize et
   function temizleMetin(text) {
     return text
       .toLowerCase()
@@ -909,30 +908,33 @@ async function showYemekImage(yemekAdi) {
   const yemekTemiz = temizleMetin(yemekAdi);
 
   try {
-    // 🔍 Google Görseller (SerpAPI proxy üzerinden)
-    const apiUrl = `https://serpapi.com/search.json?engine=google_images&q=${encodeURIComponent(yemekTemiz + ' yemek')}&hl=tr&gl=tr&api_key=demo`;
+    // 🔍 Google Görseller - SerpAPI bağlantısı
+    const apiKey = "11c05fd01f6b4889a6b18c511afadbe5ad5c7f1c20c8277108bb51102bc476fd";
+    const query = encodeURIComponent(yemekTemiz + " yemek");
+    const apiUrl = `https://serpapi.com/search.json?engine=google_images&q=${query}&hl=tr&gl=tr&api_key=${apiKey}`;
+
     const response = await fetch(apiUrl);
     const data = await response.json();
 
     if (data.images_results && data.images_results.length > 0) {
-      // En alakalı görseli seç
-      const imageResult = data.images_results.find(x => x.thumbnail && x.thumbnail.includes('http')) || data.images_results[0];
-      img.src = imageResult.thumbnail || imageResult.original;
+      // 🎯 En uygun görseli seç
+      const result = data.images_results.find(x => x.thumbnail && x.thumbnail.includes("http")) || data.images_results[0];
+      img.src = result.thumbnail || result.original;
 
       img.onload = () => {
         loading.style.display = 'none';
         img.style.display = 'block';
       };
     } else {
-      throw new Error('Görsel bulunamadı');
+      throw new Error("Görsel bulunamadı");
     }
   } catch (error) {
     console.error("Google görsellerden çekme hatası:", error);
-    loading.textContent = '❌ Görsel bulunamadı. Farklı bir yemek deneyin.';
+    loading.textContent = "❌ Görsel bulunamadı. Farklı bir yemek deneyin.";
   }
 
   img.onerror = () => {
-    loading.textContent = '❌ Görsel yüklenemedi.';
+    loading.textContent = "❌ Görsel yüklenemedi.";
   };
 }
 
