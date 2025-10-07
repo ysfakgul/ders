@@ -37,10 +37,10 @@
   }
 
   header img {
-    width: 160px;
-    height: 160px;
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
-    margin-top: 10px;
+    margin-top: 5px;
     box-shadow: 0 0 25px rgba(255,255,255,0.3);
     animation: floatLogo 4s ease-in-out infinite alternate;
     cursor: pointer;
@@ -59,31 +59,31 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 30px;
+    gap: 20px;
     width: 100%;
     max-width: 900px;
-    padding: 0 20px;
-    margin-top: 10px;
+    padding: 0 15px;
+    margin-top: 5px;
   }
 
   .ataturk-sozleri {
     flex: 1;
-    min-height: 160px;
+    min-height: 120px;
     display: flex;
     align-items: center;
     justify-content: center;
     background: rgba(255,255,255,0.1);
     backdrop-filter: blur(10px);
-    border-radius: 15px;
-    padding: 20px 25px;
+    border-radius: 12px;
+    padding: 15px 20px;
     box-shadow: 0 5px 20px rgba(0,0,0,0.2);
     position: relative;
     overflow: hidden;
   }
 
   .soz-text {
-    font-size: 1.1em;
-    line-height: 1.6;
+    font-size: 0.95em;
+    line-height: 1.5;
     text-align: center;
     font-style: italic;
     color: #fff;
@@ -95,7 +95,7 @@
     transform: translateY(20px);
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 8px;
   }
 
   .soz-text.active {
@@ -104,37 +104,45 @@
   }
 
   .soz-imza {
-    font-size: 0.85em;
+    font-size: 0.75em;
     font-style: normal;
     font-weight: 600;
     color: var(--neon-color);
     text-shadow: 0 0 8px rgba(255,221,64,0.4);
-    margin-top: 5px;
+    margin-top: 3px;
     letter-spacing: 1px;
   }
 
   @media (max-width: 768px) {
     header {
-      flex-direction: column;
-      gap: 15px;
+      flex-direction: row;
+      gap: 10px;
       padding: 0 10px;
+      align-items: center;
     }
 
     header img {
-      width: 120px;
-      height: 120px;
-      margin-top: 8px;
+      width: 70px;
+      height: 70px;
+      margin-top: 5px;
+      flex-shrink: 0;
     }
 
     .ataturk-sozleri {
-      width: 100%;
-      min-height: 120px;
-      padding: 15px 20px;
+      flex: 1;
+      min-height: 80px;
+      padding: 10px 12px;
     }
 
     .soz-text {
-      font-size: 0.95em;
-      line-height: 1.5;
+      font-size: 0.75em;
+      line-height: 1.3;
+      gap: 5px;
+    }
+
+    .soz-imza {
+      font-size: 0.65em;
+      margin-top: 2px;
     }
   }
 
@@ -145,21 +153,21 @@
 
   .container {
     background: rgba(255,255,255,0.12);
-    padding: 25px 35px;
+    padding: 15px 25px;
     border-radius: 8px;
     backdrop-filter: blur(15px);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
     width: 100%;
     max-width: 800px;
     text-align: center;
-    margin: 5px 0;
+    margin: 3px 0;
     box-sizing: border-box;
   }
 
   @media (max-width: 768px) {
     .container {
-      padding: 20px 15px;
-      margin: 8px;
+      padding: 12px 15px;
+      margin: 5px 8px;
       width: calc(100vw - 16px);
       border-radius: 12px;
       max-width: calc(100vw - 16px);
@@ -167,51 +175,54 @@
   }
 
   .countdown { 
-    font-size: 1.3em; 
+    font-size: 1.15em; 
     font-weight: bold; 
-    margin-top: 10px;
+    margin-top: 8px;
   }
 
   @media (max-width: 768px) {
     .countdown {
-      font-size: 1.1em;
+      font-size: 1em;
+      margin-top: 5px;
     }
   }
 
   .next { 
-    margin-top: 10px; 
-    font-size: 1.1em; 
+    margin-top: 8px; 
+    font-size: 1em; 
     background: rgba(255,255,255,0.1); 
-    padding: 10px 16px; 
-    border-radius: 5px;
-  }
-
-  @media (max-width: 768px) {
-    .next {
-      font-size: 1em;
-      padding: 8px 12px;
-    }
-  }
-
-  .time { 
-    font-size: 1.1em; 
-    margin-top: 15px; 
-    background: rgba(255,255,255,0.2); 
     padding: 8px 14px; 
     border-radius: 5px;
   }
 
   @media (max-width: 768px) {
-    .time {
-      font-size: 1em;
+    .next {
+      font-size: 0.9em;
       padding: 6px 10px;
+      margin-top: 5px;
+    }
+  }
+
+  .time { 
+    font-size: 1em; 
+    margin-top: 10px; 
+    background: rgba(255,255,255,0.2); 
+    padding: 6px 12px; 
+    border-radius: 5px;
+  }
+
+  @media (max-width: 768px) {
+    .time {
+      font-size: 0.9em;
+      padding: 5px 10px;
+      margin-top: 8px;
     }
   }
 
   .yemek-container {
-    margin: 5px 0;
+    margin: 3px 0;
     background: rgba(255,255,255,0.1);
-    padding: 25px 35px;
+    padding: 15px 25px;
     border-radius: 8px;
     box-shadow: 0 0 15px rgba(255,255,255,0.1);
     text-align: center;
@@ -222,8 +233,8 @@
 
   @media (max-width: 768px) {
     .yemek-container {
-      padding: 20px 15px;
-      margin: 8px;
+      padding: 12px 15px;
+      margin: 5px 8px;
       width: calc(100vw - 16px);
       border-radius: 12px;
       max-width: calc(100vw - 16px);
@@ -231,8 +242,8 @@
   }
 
   .yemek-container h3 { 
-    margin: 0 0 15px; 
-    font-size: 1.3em;
+    margin: 0 0 10px; 
+    font-size: 1.15em;
     font-weight: 600;
     color: var(--neon-color);
     text-shadow: 0 0 10px rgba(255,221,64,0.3);
@@ -241,8 +252,8 @@
 
   @media (max-width: 768px) {
     .yemek-container h3 {
-      font-size: 1.15em;
-      margin: 0 0 12px;
+      font-size: 1em;
+      margin: 0 0 8px;
     }
   }
 
@@ -254,10 +265,10 @@
 
   .yemek-listesi li {
     background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08));
-    margin: 8px 0;
-    padding: 12px 16px;
+    margin: 5px 0;
+    padding: 8px 12px;
     border-radius: 8px;
-    font-size: 1.05em;
+    font-size: 0.95em;
     font-weight: 500;
     letter-spacing: 0.3px;
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
@@ -273,25 +284,25 @@
 
   @media (max-width: 768px) {
     .yemek-listesi li {
-      font-size: 0.98em;
-      padding: 10px 14px;
-      margin: 6px 0;
+      font-size: 0.85em;
+      padding: 6px 10px;
+      margin: 4px 0;
     }
   }
 
   #nobetci {
-    margin-top: 10px;
-    font-size: 1.1em;
+    margin-top: 8px;
+    font-size: 1em;
     background: rgba(255,255,255,0.1);
-    padding: 10px 16px;
+    padding: 8px 14px;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(255,255,255,0.1);
   }
 
   @media (max-width: 768px) {
     #nobetci {
-      font-size: 1em;
-      padding: 8px 12px;
+      font-size: 0.9em;
+      padding: 6px 10px;
     }
   }
 
@@ -299,27 +310,28 @@
     margin: 0;
     font-weight: 500;
     opacity: 0.9;
-    font-size: 1em;
+    font-size: 0.95em;
   }
 
   @media (max-width: 768px) {
     #nobetci h4 {
-      font-size: 0.9em;
+      font-size: 0.85em;
     }
   }
 
   #nobetci span {
     display: block;
-    font-size: 1.5em;
+    font-size: 1.3em;
     font-weight: 700;
-    margin-top: 5px;
+    margin-top: 4px;
     color: #ffdd40;
     text-shadow: 0 0 10px #ffdd40;
   }
 
   @media (max-width: 768px) {
     #nobetci span {
-      font-size: 1.2em;
+      font-size: 1.1em;
+      margin-top: 3px;
     }
   }
 
@@ -369,18 +381,19 @@
 
   footer {
     margin-top: auto;
-    margin-bottom: 8px;
-    padding-bottom: 10px;
-    font-size: 0.9em;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    font-size: 0.8em;
     opacity: 0.8;
     font-style: italic;
   }
 
   @media (max-width: 768px) {
     footer {
-      font-size: 0.8em;
+      font-size: 0.7em;
       padding: 0 10px;
       text-align: center;
+      margin-bottom: 3px;
     }
   }
 
