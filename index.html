@@ -214,28 +214,94 @@
   }
 
   // 🔹 GELİŞTİRİLMİŞ GÖRSEL GETİRME FONKSİYONU
-  async function showYemekImage(yemekAdi){
-    const container=document.getElementById('yemekImageContainer');
-    const img=document.getElementById('yemekImage');
-    const loading=document.getElementById('imageLoading');
-    container.classList.add('show'); img.style.display='none'; loading.style.display='block';
-    loading.textContent='🍽️ Görsel yükleniyor...';
-    try{
-      let yemekTemiz=yemekAdi.toLowerCase().replace(/\(.*?\)/g,'').trim()
-        .replace(/ç/g,'c').replace(/ğ/g,'g').replace(/ı/g,'i').replace(/ö/g,'o').replace(/ş/g,'s').replace(/ü/g,'u');
-      const map={"çorba":"soup","pilav":"rice","köfte":"meatballs","makarna":"pasta","kebap":"kebab","tavuk":"chicken","et":"beef","balık":"fish","tatlı":"dessert","börek":"pastry","salata":"salad","fasulye":"beans","mercimek":"lentil","nohut":"chickpeas","patates":"potato","yumurta":"egg"};
-      Object.keys(map).forEach(tr=>{if(yemekTemiz.includes(tr))yemekTemiz=yemekTemiz.replace(tr,map[tr]);});
-      const query=encodeURIComponent(yemekTemiz+' traditional Turkish food');
-      const url=`https://pixabay.com/api/?key=45492961-7e430c5c5c4adf7e81b66ef7c&q=${query}&category=food&image_type=photo&orientation=horizontal&lang=en&per_page=5`;
-      const res=await fetch(url); const data=await res.json();
-      if(data.hits&&data.hits.length>0){
-        const selected=data.hits.find(h=>h.webformatURL.includes('food'))||data.hits[0];
-        img.src=selected.largeImageURL||selected.webformatURL;
-        img.onload=()=>{loading.style.display='none';img.style.display='block';};
-      }else throw new Error('Görsel bulunamadı');
-      img.onerror=()=>{loading.textContent='❌ Görsel yüklenemedi.'};
-    }catch(e){loading.textContent='❌ Görsel yüklenemedi';}
+async function showYemekImage(yemekAdi) {
+  const container = document.getElementById('yemekImageContainer');
+  const img = document.getElementById('yemekImage');
+  const loading = document.getElementById('imageLoading');
+  
+  container.classList.add('show');
+  img.style.display = 'none';
+  loading.style.display = 'block';
+  loading.textContent = '🍽️ Görsel yükleniyor...';
+
+  try {
+    // Yemek adını sadeleştir ve ASCII’ye çevir
+    let yemekTemiz = yemekAdi.toLowerCase()
+      .replace(/\(.*?\)/g, '')
+      .replace(/ç/g, 'c')
+      .replace(/ğ/g, 'g')
+      .replace(/ı/g, 'i')
+      .replace(/ö/g, 'o')
+      .replace(/ş/g, 's')
+      .replace(/ü/g, 'u')
+      .trim();
+
+    // Anahtar kelime dönüşümü
+    const map = {
+      "çorba": "soup", "pilav": "rice", "köfte": "meatballs", "makarna": "pasta",
+      "kebap": "kebab", "tavuk": "chicken", "et": "beef", "balık": "fish",
+      "tatlı": "dessert", "börek": "pastry", "salata": "salad",
+      "fasulye": "beans", "mercimek": "lentil", "nohut": "chickpeas",
+      "patates": "potato", "yumurta": "egg", "dolma": "stuffed pepper"
+    };
+    Object.keys(map).forEach(tr => {
+      if (yemekTemiz.includes(tr)) yemekTemiz = yemekTemiz.replace(tr, map[tr]);
+    });
+
+    const query = encodeURIComponent(yemekTemiz + " turkish food meal");
+
+    // 1️⃣ Pixabay
+    const pixabayUrl = `https://pixabay.com/api/?key=45492961-7e430c5c5c4adf7e81b66ef7c&q=${query}&category=food&image_type=photo&orientation=horizontal&lang=en&per_page=3`;
+    const pixaRes = await fetch(pixabayUrl);
+    const pixaData = await pixaRes.json();
+
+    if (pixaData.hits && pixaData.hits.length > 0) {
+      img.src = pixaData.hits[0].webformatURL;
+      img.onload = () => {
+        loading.style.display = 'none';
+        img.style.display = 'block';
+      };
+      return;
+    }
+
+    // 2️⃣ Wikimedia Commons (alternatif)
+    const wikiUrl = `https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrsearch=${query}&gsrlimit=1&prop=imageinfo&iiprop=url&iiurlwidth=600`;
+    const wikiRes = await fetch(wikiUrl);
+    const wikiData = await wikiRes.json();
+
+    if (wikiData.query) {
+      const pages = Object.values(wikiData.query.pages);
+      if (pages[0].imageinfo && pages[0].imageinfo[0].thumburl) {
+        img.src = pages[0].imageinfo[0].thumburl;
+        img.onload = () => {
+          loading.style.display = 'none';
+          img.style.display = 'block';
+        };
+        return;
+      }
+    }
+
+    // 3️⃣ Unsplash yedek (anahtar gerekmez)
+    const unsplashUrl = `https://source.unsplash.com/600x400/?${query}`;
+    img.src = unsplashUrl;
+    img.onload = () => {
+      loading.style.display = 'none';
+      img.style.display = 'block';
+    };
+    img.onerror = () => {
+      img.src = "default_food.png"; // 📌 Kendi yedeğini ekle
+      img.onload = () => {
+        loading.style.display = 'none';
+        img.style.display = 'block';
+      };
+    };
+
+  } catch (error) {
+    console.error("Görsel yükleme hatası:", error);
+    loading.textContent = '❌ Görsel yüklenemedi';
   }
+}
+
   function closeYemekImage(){document.getElementById('yemekImageContainer').classList.remove('show');}
 
   async function loadNobetci(){
