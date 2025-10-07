@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-orientation" content="portrait">
 <meta name="theme-color" content="#1e3a8a">
 <title>Mimar İzzet Baysal MTAL</title>
-<link rel="manifest" href="manifest.json?v=4">
+<link rel="manifest" href="manifest.json?v=5">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
@@ -24,12 +24,11 @@
     margin: 0;
     padding: 0;
     height: 100%;
-    overflow: hidden; /* scroll tamamen devre dışı */
+    overflow: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    transition: background 1s ease;
   }
 
   header img {
@@ -57,8 +56,8 @@
     margin-top: 10px;
   }
 
-  .countdown { font-size: 2.2em; font-weight: bold; margin-top: 15px; }
-  .next { margin-top: 15px; font-size: 1.1em; background: rgba(255,255,255,0.1); padding: 10px 16px; border-radius: 15px; }
+  .countdown { font-size: 2em; font-weight: bold; margin-top: 10px; }
+  .next { margin-top: 10px; font-size: 1.1em; background: rgba(255,255,255,0.1); padding: 10px 16px; border-radius: 15px; }
   .time { font-size: 1.1em; margin-top: 15px; background: rgba(255,255,255,0.2); padding: 8px 14px; border-radius: 10px; }
 
   .yemek-container {
@@ -81,7 +80,30 @@
     font-size: 1em;
   }
 
-  /* 🏫 OKUL KAPALI ekranı */
+  #nobetci {
+    margin-top: 10px;
+    font-size: 1.1em;
+    background: rgba(255,255,255,0.1);
+    padding: 10px 16px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(255,255,255,0.1);
+  }
+
+  #nobetci h4 {
+    margin: 0;
+    font-weight: 500;
+    opacity: 0.9;
+  }
+
+  #nobetci span {
+    display: block;
+    font-size: 1.5em;
+    font-weight: 700;
+    margin-top: 5px;
+    color: #ffdd40;
+    text-shadow: 0 0 10px #ffdd40;
+  }
+
   #okulKapali {
     position: fixed;
     inset: 0;
@@ -115,13 +137,6 @@
     to { text-shadow: 0 0 40px var(--neon-color), 0 0 80px #fffde0; opacity: 1; }
   }
 
-  #okulKapali small {
-    font-size: 0.4em;
-    font-weight: 400;
-    opacity: 0.8;
-    margin-top: 10px;
-  }
-
   footer {
     margin-top: auto;
     margin-bottom: 8px;
@@ -141,6 +156,8 @@
     display: none;
     z-index: 999;
   }
+
+
 </style>
 </head>
 <body>
@@ -158,6 +175,10 @@
   <div class="yemek-container">
     <h3>Bugünün Öğle Yemeği</h3>
     <ul class="yemek-listesi" id="yemekListesi"></ul>
+    <div id="nobetci">
+      <h4>👨‍🏫 Nöbetçi Müdür Yardımcısı</h4>
+      <span id="nobetciAd"></span>
+    </div>
   </div>
 
   <div id="okulKapali">
@@ -172,9 +193,21 @@
   let schedule = [];
 
   async function loadSchedule() {
-    const response = await fetch('data.json?v=4');
-    schedule = await response.json();
-    updateClock();
+    try {
+      const response = await fetch('data.json?v=5');
+      schedule = await response.json();
+      console.log("Ders programı yüklendi:", schedule);
+      updateClock();
+    } catch (error) {
+      console.error("Ders programı yüklenemedi:", error);
+      // Test için örnek veri
+      schedule = [
+        {type: "1. Ders", label: "Ders", start: "08:45", end: "09:25"},
+        {type: "1. Teneffüs", label: "Teneffüs", start: "09:25", end: "09:40"},
+        {type: "2. Ders", label: "Ders", start: "09:40", end: "10:20"}
+      ];
+      updateClock();
+    }
   }
 
   function parseTime(str) {
@@ -184,104 +217,155 @@
     return d;
   }
 
-  function formatTime(sec) {
-    const m = Math.floor(sec / 60);
-    const s = sec % 60;
-    return `${m.toString().padStart(2,'0')}:${s.toString().padStart(2,'0')}`;
-  }
-
   function updateClock() {
     if (schedule.length === 0) return;
+    
     const now = new Date();
-    const gun = now.getDay(); // 0 = Pazar, 6 = Cumartesi
+    const gun = now.getDay();
     const okulKapali = document.getElementById("okulKapali");
     const countdown = document.getElementById("countdown");
     const status = document.getElementById("status");
-    document.getElementById('currentTime').textContent = `🕒 Şu an: ${now.toLocaleTimeString('tr-TR')}`;
+    const next = document.getElementById("nextLesson");
     
-    // Hafta sonu doğrudan kapalı
+    document.getElementById('currentTime').textContent = `🕒 Şu an: ${now.toLocaleTimeString('tr-TR')}`;
+
+    // Hafta sonu kontrolü
     if (gun === 0 || gun === 6) {
       okulKapali.style.display = "flex";
       status.textContent = "";
       countdown.textContent = "";
+      next.textContent = "";
       return;
     }
 
-    const ilkDers = parseTime(schedule[0].start);
-    const sonDers = parseTime(schedule[schedule.length - 1].end);
+    okulKapali.style.display = "none";
+    let currentIndex = -1;
+    let foundCurrent = false;
 
-    // İlk derse 60 dakika öncesinden başla
-    const ilkDersOncesi60dk = new Date(ilkDers.getTime() - 60 * 60 * 1000); // 60 dakika öncesi
-
-    if (now < ilkDersOncesi60dk) {
-      // Henüz 60 dakika öncesine bile gelmediyse okul kapalı göster
-      okulKapali.style.display = "flex";
-      status.textContent = "";
-      countdown.textContent = "";
-      return;
-    }
-
-    if (now < ilkDers) {
-      // İlk derse 60 dakika veya daha az kaldıysa geri sayım göster
-      const fark = Math.floor((ilkDers - now) / 1000);
-      if (fark > 0) {
-        const m = Math.floor(fark / 60);
-        const s = fark % 60;
-        okulKapali.style.display = "none";
-        status.textContent = "1. Derse kalan süre:";
-        countdown.textContent = `${m} dk ${s} sn`;
-      }
-      return;
-    }
-
-    // Ders saatleri içinde mi?
-    let found = false;
+    // Şu anki ders veya etkinliği bul
     for (let i = 0; i < schedule.length; i++) {
       const start = parseTime(schedule[i].start);
       const end = parseTime(schedule[i].end);
-      if (now >= start && now <= end) {
-        found = true;
-        okulKapali.style.display = "none";
+      
+      if (now >= start && now < end) {
+        currentIndex = i;
+        foundCurrent = true;
         break;
       }
     }
 
-    // Son dersten sonra
-    if (!found && now > sonDers) {
-      okulKapali.style.display = "flex";
-      status.textContent = "";
-      countdown.textContent = "";
+    if (foundCurrent && currentIndex >= 0) {
+      // Ders veya etkinlik devam ediyor
+      const ders = schedule[currentIndex];
+      const end = parseTime(ders.end);
+      const kalan = Math.floor((end - now) / 1000);
+      
+      if (kalan > 0) {
+        const dakika = Math.floor(kalan / 60);
+        const saniye = kalan % 60;
+        status.textContent = `${ders.type} devam ediyor`;
+        countdown.textContent = `🕐 Bitmesine ${dakika} dk ${saniye} sn kaldı`;
+
+        if (schedule[currentIndex + 1]) {
+          next.textContent = `Sıradaki: ${schedule[currentIndex + 1].type} (${schedule[currentIndex + 1].start} - ${schedule[currentIndex + 1].end})`;
+        } else {
+          next.textContent = "🎉 Günün son etkinliği!";
+        }
+      }
+    } else {
+      // Ders arası veya okul öncesi/sonrası
+      let nextDers = null;
+      for (let i = 0; i < schedule.length; i++) {
+        const start = parseTime(schedule[i].start);
+        if (now < start) {
+          nextDers = schedule[i];
+          break;
+        }
+      }
+
+      if (nextDers) {
+        const fark = Math.floor((parseTime(nextDers.start) - now) / 1000);
+        if (fark > 0) {
+          const dakika = Math.floor(fark / 60);
+          const saniye = fark % 60;
+          status.textContent = "Teneffüstesiniz";
+          countdown.textContent = `🕐 ${nextDers.type} ${dakika} dk ${saniye} sn sonra başlayacak`;
+          next.textContent = `${nextDers.start} - ${nextDers.end}`;
+        }
+      } else {
+        // Okul günü bitti
+        okulKapali.style.display = "flex";
+        status.textContent = "";
+        countdown.textContent = "";
+        next.textContent = "";
+      }
     }
   }
 
   async function loadMeals() {
-    const response = await fetch("yemek.json?v=4");
-    const data = await response.json();
-    const today = new Date();
-    const gun = today.getDate();
-    const ay = today.getMonth() + 1;
-    const yil = today.getFullYear();
-    const bugunStr = `${gun}.${ay}.${yil}`;
-    const kayit = data.find(x => x.tarih === bugunStr);
-    const liste = document.getElementById("yemekListesi");
-    if (kayit && kayit.ogle_yemegi) {
-      kayit.ogle_yemegi.forEach(yemek => {
-        const li = document.createElement("li");
-        li.textContent = yemek;
-        liste.appendChild(li);
-      });
-    } else {
-      liste.innerHTML = "<li>Bugün için yemek bilgisi yok.</li>";
+    try {
+      const response = await fetch("yemek.json?v=" + Date.now());
+      const data = await response.json();
+      const today = new Date();
+      const gun = today.getDate();
+      const ay = today.getMonth() + 1;
+      const yil = today.getFullYear();
+      const bugunStr = `${gun}.${ay}.${yil}`;
+      
+      console.log("Aranan tarih:", bugunStr);
+      console.log("Yemek verisi:", data);
+      
+      const kayit = data.find(x => x.tarih === bugunStr);
+      const liste = document.getElementById("yemekListesi");
+      liste.innerHTML = "";
+      
+      if (kayit && kayit.ogle_yemegi && kayit.ogle_yemegi.length > 0) {
+        kayit.ogle_yemegi.forEach(yemek => {
+          const li = document.createElement("li");
+          li.textContent = yemek;
+          liste.appendChild(li);
+        });
+      } else {
+        liste.innerHTML = "<li>Bugün için yemek bilgisi yok.</li>";
+      }
+    } catch (error) {
+      console.error("Yemek listesi yüklenemedi:", error);
+      document.getElementById("yemekListesi").innerHTML = "<li>Yemek listesi yüklenemedi.</li>";
+    }
+  }
+
+  async function loadNobetci() {
+    try {
+      const response = await fetch("nobet.json?v=5");
+      const data = await response.json();
+
+      const today = new Date();
+      const gun = today.getDate().toString().padStart(2, '0');
+      const ay = (today.getMonth() + 1).toString().padStart(2, '0');
+      const yil = today.getFullYear();
+      const bugunStr = `${yil}-${ay}-${gun}`;
+
+      const kayit = data.find(x => x.Tarih === bugunStr);
+      const nobetciAd = document.getElementById("nobetciAd");
+
+      if (kayit) {
+        nobetciAd.textContent = kayit.AdSoyad;
+      } else {
+        nobetciAd.textContent = "Bilgi bulunamadı";
+      }
+    } catch (error) {
+      console.error("Nöbetçi bilgisi yüklenemedi:", error);
+      document.getElementById("nobetciAd").textContent = "Bilgi yüklenemedi";
     }
   }
 
   loadSchedule();
   loadMeals();
+  loadNobetci();
   setInterval(updateClock, 1000);
 
-  // SW güncelleme bildirimi
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js?v=4").then(reg => {
+    navigator.serviceWorker.register("sw.js?v=5").then(reg => {
       reg.addEventListener("updatefound", () => {
         const newWorker = reg.installing;
         newWorker.addEventListener("statechange", () => {

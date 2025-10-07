@@ -1,4 +1,4 @@
-const CACHE_NAME = "mtal-cache-v8"; // sürümü artırman yeterli
+const CACHE_NAME = "mtal-cache-v10"; // sürümü artırman yeterli
 const urlsToCache = [
   "./",
   "./index.html",
