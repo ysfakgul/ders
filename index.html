@@ -23,8 +23,8 @@
     background: var(--bg-gradient);
     margin: 0;
     padding: 0;
-    height: 100%;
-    overflow: hidden;
+    min-height: 100vh;
+    overflow-x: hidden;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -32,12 +32,20 @@
   }
 
   header img {
-    width: 180px;
-    height: 180px;
+    width: 140px;
+    height: 140px;
     border-radius: 50%;
-    margin-top: 20px;
+    margin-top: 10px;
     box-shadow: 0 0 25px rgba(255,255,255,0.3);
     animation: floatLogo 4s ease-in-out infinite alternate;
+  }
+
+  @media (max-width: 768px) {
+    header img {
+      width: 100px;
+      height: 100px;
+      margin-top: 8px;
+    }
   }
 
   @keyframes floatLogo {
@@ -48,36 +56,133 @@
   .container {
     background: rgba(255,255,255,0.12);
     padding: 25px 35px;
-    border-radius: 25px;
+    border-radius: 8px;
     backdrop-filter: blur(15px);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
-    max-width: 90%;
+    width: 100%;
+    max-width: 800px;
     text-align: center;
+    margin: 5px 0;
+    box-sizing: border-box;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 20px 20px;
+      margin: 10px 10px;
+      width: calc(100% - 20px);
+    }
+  }
+
+  .countdown { 
+    font-size: 1.3em; 
+    font-weight: bold; 
     margin-top: 10px;
   }
 
-  .countdown { font-size: 2em; font-weight: bold; margin-top: 10px; }
-  .next { margin-top: 10px; font-size: 1.1em; background: rgba(255,255,255,0.1); padding: 10px 16px; border-radius: 15px; }
-  .time { font-size: 1.1em; margin-top: 15px; background: rgba(255,255,255,0.2); padding: 8px 14px; border-radius: 10px; }
+  @media (max-width: 768px) {
+    .countdown {
+      font-size: 1.1em;
+    }
+  }
+
+  .next { 
+    margin-top: 10px; 
+    font-size: 1.1em; 
+    background: rgba(255,255,255,0.1); 
+    padding: 10px 16px; 
+    border-radius: 5px;
+  }
+
+  @media (max-width: 768px) {
+    .next {
+      font-size: 1em;
+      padding: 8px 12px;
+    }
+  }
+
+  .time { 
+    font-size: 1.1em; 
+    margin-top: 15px; 
+    background: rgba(255,255,255,0.2); 
+    padding: 8px 14px; 
+    border-radius: 5px;
+  }
+
+  @media (max-width: 768px) {
+    .time {
+      font-size: 1em;
+      padding: 6px 10px;
+    }
+  }
 
   .yemek-container {
-    margin-top: 10px;
+    margin: 5px 0;
     background: rgba(255,255,255,0.1);
-    padding: 10px 15px;
-    border-radius: 20px;
+    padding: 25px 35px;
+    border-radius: 8px;
     box-shadow: 0 0 15px rgba(255,255,255,0.1);
     text-align: center;
-    max-width: 90%;
+    width: 100%;
+    max-width: 800px;
+    box-sizing: border-box;
   }
 
-  .yemek-container h3 { margin: 0 0 10px; font-size: 1.2em; }
-  .yemek-listesi { list-style: none; padding: 0; margin: 0; }
+  @media (max-width: 768px) {
+    .yemek-container {
+      padding: 20px 20px;
+      margin: 10px 10px;
+      width: calc(100% - 20px);
+    }
+  }
+
+  .yemek-container h3 { 
+    margin: 0 0 15px; 
+    font-size: 1.3em;
+    font-weight: 600;
+    color: var(--neon-color);
+    text-shadow: 0 0 10px rgba(255,221,64,0.3);
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 768px) {
+    .yemek-container h3 {
+      font-size: 1.15em;
+      margin: 0 0 12px;
+    }
+  }
+
+  .yemek-listesi { 
+    list-style: none; 
+    padding: 0; 
+    margin: 0;
+  }
+
   .yemek-listesi li {
-    background: rgba(255,255,255,0.15);
-    margin: 5px 0;
-    padding: 6px 10px;
-    border-radius: 10px;
-    font-size: 1em;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08));
+    margin: 8px 0;
+    padding: 12px 16px;
+    border-radius: 8px;
+    font-size: 1.05em;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    border-left: 3px solid rgba(255,221,64,0.6);
+  }
+
+  .yemek-listesi li:hover {
+    transform: translateX(5px);
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.12));
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  @media (max-width: 768px) {
+    .yemek-listesi li {
+      font-size: 0.98em;
+      padding: 10px 14px;
+      margin: 6px 0;
+    }
   }
 
   #nobetci {
@@ -85,14 +190,28 @@
     font-size: 1.1em;
     background: rgba(255,255,255,0.1);
     padding: 10px 16px;
-    border-radius: 15px;
+    border-radius: 5px;
     box-shadow: 0 0 10px rgba(255,255,255,0.1);
+  }
+
+  @media (max-width: 768px) {
+    #nobetci {
+      font-size: 1em;
+      padding: 8px 12px;
+    }
   }
 
   #nobetci h4 {
     margin: 0;
     font-weight: 500;
     opacity: 0.9;
+    font-size: 1em;
+  }
+
+  @media (max-width: 768px) {
+    #nobetci h4 {
+      font-size: 0.9em;
+    }
   }
 
   #nobetci span {
@@ -102,6 +221,12 @@
     margin-top: 5px;
     color: #ffdd40;
     text-shadow: 0 0 10px #ffdd40;
+  }
+
+  @media (max-width: 768px) {
+    #nobetci span {
+      font-size: 1.2em;
+    }
   }
 
   #okulKapali {
@@ -124,6 +249,17 @@
     animation: bgShift 6s ease-in-out infinite, neonPulse 1.5s infinite alternate;
     z-index: 999;
     display: none;
+    padding: 20px;
+  }
+
+  @media (max-width: 768px) {
+    #okulKapali {
+      font-size: 2em;
+    }
+    
+    #okulKapali small {
+      font-size: 0.6em;
+    }
   }
 
   @keyframes bgShift {
@@ -140,21 +276,46 @@
   footer {
     margin-top: auto;
     margin-bottom: 8px;
+    padding-bottom: 10px;
     font-size: 0.9em;
     opacity: 0.8;
     font-style: italic;
   }
 
+  @media (max-width: 768px) {
+    footer {
+      font-size: 0.8em;
+      padding: 0 10px;
+      text-align: center;
+    }
+  }
+
   #updateBanner {
     position: fixed;
     bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
     background: #1e3a8a;
     color: white;
     padding: 10px 20px;
-    border-radius: 10px;
+    border-radius: 8px;
     box-shadow: 0 0 15px rgba(0,0,0,0.4);
     display: none;
     z-index: 999;
+    max-width: 90%;
+  }
+
+  @media (max-width: 768px) {
+    #updateBanner {
+      font-size: 0.9em;
+      padding: 8px 15px;
+      bottom: 10px;
+    }
+    
+    #updateBanner button {
+      font-size: 0.9em;
+      padding: 5px 10px;
+    }
   }
 
 
@@ -191,6 +352,39 @@
 
   <script>
   let schedule = [];
+  const yemekData = [
+    { "tarih": "1.10.2025", "ogle_yemegi": ["Sebze Çorbası", "Patates Oturtma", "Bulgur", "Cacık"] },
+    { "tarih": "2.10.2025", "ogle_yemegi": ["Ezogelin Çorba", "Tavuk Sote", "Pirinç Pilavı", "Ayran"] },
+    { "tarih": "3.10.2025", "ogle_yemegi": ["Yayla Çorba", "Et Sote", "Pirinç Pilavı", "Komposto"] },
+    { "tarih": "4.10.2025", "ogle_yemegi": ["Açık Büfe"] },
+    { "tarih": "5.10.2025", "ogle_yemegi": ["Açık Büfe"] },
+    { "tarih": "6.10.2025", "ogle_yemegi": ["Mercimek Çorba", "Külbastı", "Pirinç Pilavı", "Ayran"] },
+    { "tarih": "7.10.2025", "ogle_yemegi": ["Yayla Çorba", "Etli Kuru Fasulye", "Meyhane Pilavı", "Cacık"] },
+    { "tarih": "8.10.2025", "ogle_yemegi": ["Ezogelin Çorba", "İzmir Köfte", "Pirinç Pilavı", "Ayran"] },
+    { "tarih": "9.10.2025", "ogle_yemegi": ["Tarhana Çorba", "Mantı", "Salata", "Tatlı"] },
+    { "tarih": "10.10.2025", "ogle_yemegi": ["Şehriye Çorba", "Pırasa", "Makarna", "Yoğurt"] },
+    { "tarih": "11.10.2025", "ogle_yemegi": ["Açık Büfe"] },
+    { "tarih": "12.10.2025", "ogle_yemegi": ["Açık Büfe"] },
+    { "tarih": "13.10.2025", "ogle_yemegi": ["Ezogelin Çorba", "Orman Kebap", "Pirinç Pilavı", "Cacık"] },
+    { "tarih": "14.10.2025", "ogle_yemegi": ["Domates Çorba", "Barbunya Yemeği", "Bulgur", "Tatlı"] },
+    { "tarih": "15.10.2025", "ogle_yemegi": ["Şehriye Çorba", "Ispanak Yemeği", "Makarna", "Yoğurt"] },
+    { "tarih": "16.10.2025", "ogle_yemegi": ["Mercimek Çorba", "Fırın Tavuk But", "Pirinç Pilavı", "Ayran"] },
+    { "tarih": "17.10.2025", "ogle_yemegi": ["Yayla Çorba", "Patates Oturtma", "Bulgur", "Ayran"] },
+    { "tarih": "18.10.2025", "ogle_yemegi": ["Açık Büfe"] },
+    { "tarih": "19.10.2025", "ogle_yemegi": ["Açık Büfe"] },
+    { "tarih": "20.10.2025", "ogle_yemegi": ["Sebze Çorbası", "Etli Nohut", "Bulgur", "Cacık"] },
+    { "tarih": "21.10.2025", "ogle_yemegi": ["Domates Çorba", "Tavuk Döner", "Pirinç Pilavı", "Ayran"] },
+    { "tarih": "22.10.2025", "ogle_yemegi": ["Şehriye Çorba", "Etli Mantı", "Patates Salatası", "Tatlı"] },
+    { "tarih": "23.10.2025", "ogle_yemegi": ["Ezogelin Çorba", "Etli Türlü", "Makarna", "Yoğurt"] },
+    { "tarih": "24.10.2025", "ogle_yemegi": ["Mantar Çorba", "Külbastı", "Pirinç Pilavı", "Ayran"] },
+    { "tarih": "25.10.2025", "ogle_yemegi": ["Açık Büfe"] },
+    { "tarih": "26.10.2025", "ogle_yemegi": ["Açık Büfe"] },
+    { "tarih": "27.10.2025", "ogle_yemegi": ["Domates Çorba", "Etli Kuru Fasulye", "Bulgur", "Yoğurt"] },
+    { "tarih": "28.10.2025", "ogle_yemegi": ["Açık Büfe (29 Ekim Cumhuriyet Bayramı)"] },
+    { "tarih": "29.10.2025", "ogle_yemegi": ["Açık Büfe (Resmî Tatil)"] },
+    { "tarih": "30.10.2025", "ogle_yemegi": ["Şehriye Çorba", "Orman Kebap", "Pirinç Pilavı", "Komposto"] },
+    { "tarih": "31.10.2025", "ogle_yemegi": ["Ezogelin Çorba", "Tavuk Sote", "Pirinç Pilavı", "Ayran"] }
+  ];
 
   async function loadSchedule() {
     try {
@@ -302,10 +496,9 @@
     }
   }
 
-  async function loadMeals() {
+  function loadMeals() {
     try {
-      const response = await fetch("yemek.json?v=" + Date.now());
-      const data = await response.json();
+      const data = yemekData;
       const today = new Date();
       const gun = today.getDate();
       const ay = today.getMonth() + 1;
@@ -313,7 +506,6 @@
       const bugunStr = `${gun}.${ay}.${yil}`;
       
       console.log("Aranan tarih:", bugunStr);
-      console.log("Yemek verisi:", data);
       
       const kayit = data.find(x => x.tarih === bugunStr);
       const liste = document.getElementById("yemekListesi");
