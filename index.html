@@ -880,71 +880,79 @@
   }
 
   async function showYemekImage(yemekAdi) {
-    const container = document.getElementById('yemekImageContainer');
-    const img = document.getElementById('yemekImage');
-    const loading = document.getElementById('imageLoading');
-    
-    container.classList.add('show');
-    img.style.display = 'none';
-    loading.style.display = 'block';
-    loading.textContent = '🍽️ Görsel yükleniyor...';
-    
-    try {
-      // Yemek adını temizle
-      let yemekTemiz = yemekAdi
-        .toLowerCase()
-        .replace(/\(.*?\)/g, '')
-        .trim();
-      
-      // Google Images alternatif yöntem - Serpapi kullanarak
-      // Not: API key gerektirmeyen alternatif yöntem
-      
-      // Bing Image Search API alternatifi (ücretsiz tier)
-      const searchQuery = encodeURIComponent(yemekTemiz + ' yemek');
-      
-      // Google Images'dan görsel çekmek için proxy kullan
-      // Bu servis Google'dan görsel URL'lerini çeker
-      const apiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://www.google.com/search?tbm=isch&q=' + searchQuery)}`;
-      
-      // Alternatif: DuckDuckGo Instant Answer API (ücretsiz)
-      const ddgUrl = `https://api.duckduckgo.com/?q=${encodeURIComponent(yemekTemiz + ' yemek')}&format=json&pretty=1`;
-      
-      // En iyi çözüm: Wikimedia Commons
-      const wikiUrl = `https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrsearch=${encodeURIComponent(yemekTemiz)}&gsrlimit=1&prop=imageinfo&iiprop=url&iiurlwidth=400`;
-      
-      // Google CSE Proxy (ücretsiz, key gerektirmez)
-      const proxyUrl = `https://serpapi.com/search?engine=google_images&q=${searchQuery}&api_key=demo`;
-      
-      // En basit ve çalışır yöntem: Direct Google Images URL
-      // Google Images'dan ilk sonucu göster
-      const googleImageSearch = `https://www.google.com/search?tbm=isch&q=${searchQuery}`;
-      
-      // Scraping yerine hazır bir API kullanalım
-      // Pixabay API (ücretsiz, key: demo için açık)
-      const pixabayUrl = `https://pixabay.com/api/?key=45492961-7e430c5c5c4adf7e81b66ef7c&q=${encodeURIComponent(yemekTemiz)}&image_type=photo&lang=tr&per_page=3`;
-      
-      const response = await fetch(pixabayUrl);
-      const data = await response.json();
-      
-      if (data.hits && data.hits.length > 0) {
-        img.src = data.hits[0].webformatURL;
+  const container = document.getElementById('yemekImageContainer');
+  const img = document.getElementById('yemekImage');
+  const loading = document.getElementById('imageLoading');
+
+  container.classList.add('show');
+  img.style.display = 'none';
+  loading.style.display = 'block';
+  loading.textContent = '🍽️ Görsel yükleniyor...';
+
+  // ✅ Türkçe karakterleri normalize eden yardımcı fonksiyon
+  function temizleMetin(text) {
+    return text
+      .toLowerCase()
+      .replace(/\(.*?\)/g, '')
+      .trim()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/ı/g, 'i')
+      .replace(/ş/g, 's')
+      .replace(/ç/g, 'c')
+      .replace(/ö/g, 'o')
+      .replace(/ü/g, 'u')
+      .replace(/ğ/g, 'g');
+  }
+
+  let yemekTemiz = temizleMetin(yemekAdi);
+  console.log("Aranan yemek:", yemekTemiz);
+
+  try {
+    // 🥇 1. Pixabay dene
+    const pixabayUrl = `https://pixabay.com/api/?key=45492961-7e430c5c5c4adf7e81b66ef7c&q=${encodeURIComponent(yemekTemiz + ' food meal')}&image_type=photo&per_page=3`;
+    const response = await fetch(pixabayUrl);
+    const data = await response.json();
+
+    if (data.hits && data.hits.length > 0) {
+      img.src = data.hits[0].webformatURL;
+      img.onload = () => {
+        loading.style.display = 'none';
+        img.style.display = 'block';
+      };
+      return;
+    }
+
+    // 🥈 2. Pixabay bulamazsa Wikimedia dene
+    const wikiUrl = `https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrsearch=${encodeURIComponent(yemekTemiz)}&gsrlimit=1&prop=imageinfo&iiprop=url&iiurlwidth=400`;
+    const responseWiki = await fetch(wikiUrl);
+    const dataWiki = await responseWiki.json();
+
+    if (dataWiki.query) {
+      const pages = Object.values(dataWiki.query.pages);
+      if (pages.length > 0 && pages[0].imageinfo) {
+        img.src = pages[0].imageinfo[0].thumburl;
         img.onload = () => {
           loading.style.display = 'none';
           img.style.display = 'block';
         };
-      } else {
-        throw new Error('Görsel bulunamadı');
+        return;
       }
-      
-      img.onerror = () => {
-        loading.textContent = '❌ Görsel yüklenemedi. Farklı bir yemek deneyin.';
-      };
-      
-    } catch (error) {
-      console.error('Görsel yükleme hatası:', error);
-      loading.textContent = '❌ Görsel yüklenemedi';
     }
+
+    // 🥉 3. Hiçbiri bulunmazsa
+    throw new Error("Görsel bulunamadı");
+
+  } catch (error) {
+    console.error("Görsel yükleme hatası:", error);
+    loading.textContent = '❌ Görsel bulunamadı, farklı bir yemek deneyin.';
   }
+
+  // ❌ Görsel yüklenmezse hata mesajı göster
+  img.onerror = () => {
+    loading.textContent = '❌ Görsel yüklenemedi.';
+  };
+}
 
   function closeYemekImage() {
     const container = document.getElementById('yemekImageContainer');
