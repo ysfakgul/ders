@@ -364,39 +364,7 @@
 
   <script>
   let schedule = [];
-  const yemekData = [
-    { "tarih": "1.10.2025", "ogle_yemegi": ["Sebze Çorbası", "Patates Oturtma", "Bulgur", "Cacık"] },
-    { "tarih": "2.10.2025", "ogle_yemegi": ["Ezogelin Çorba", "Tavuk Sote", "Pirinç Pilavı", "Ayran"] },
-    { "tarih": "3.10.2025", "ogle_yemegi": ["Yayla Çorba", "Et Sote", "Pirinç Pilavı", "Komposto"] },
-    { "tarih": "4.10.2025", "ogle_yemegi": ["Açık Büfe"] },
-    { "tarih": "5.10.2025", "ogle_yemegi": ["Açık Büfe"] },
-    { "tarih": "6.10.2025", "ogle_yemegi": ["Mercimek Çorba", "Külbastı", "Pirinç Pilavı", "Ayran"] },
-    { "tarih": "7.10.2025", "ogle_yemegi": ["Yayla Çorba", "Etli Kuru Fasulye", "Meyhane Pilavı", "Cacık"] },
-    { "tarih": "8.10.2025", "ogle_yemegi": ["Ezogelin Çorba", "İzmir Köfte", "Pirinç Pilavı", "Ayran"] },
-    { "tarih": "9.10.2025", "ogle_yemegi": ["Tarhana Çorba", "Mantı", "Salata", "Tatlı"] },
-    { "tarih": "10.10.2025", "ogle_yemegi": ["Şehriye Çorba", "Pırasa", "Makarna", "Yoğurt"] },
-    { "tarih": "11.10.2025", "ogle_yemegi": ["Açık Büfe"] },
-    { "tarih": "12.10.2025", "ogle_yemegi": ["Açık Büfe"] },
-    { "tarih": "13.10.2025", "ogle_yemegi": ["Ezogelin Çorba", "Orman Kebap", "Pirinç Pilavı", "Cacık"] },
-    { "tarih": "14.10.2025", "ogle_yemegi": ["Domates Çorba", "Barbunya Yemeği", "Bulgur", "Tatlı"] },
-    { "tarih": "15.10.2025", "ogle_yemegi": ["Şehriye Çorba", "Ispanak Yemeği", "Makarna", "Yoğurt"] },
-    { "tarih": "16.10.2025", "ogle_yemegi": ["Mercimek Çorba", "Fırın Tavuk But", "Pirinç Pilavı", "Ayran"] },
-    { "tarih": "17.10.2025", "ogle_yemegi": ["Yayla Çorba", "Patates Oturtma", "Bulgur", "Ayran"] },
-    { "tarih": "18.10.2025", "ogle_yemegi": ["Açık Büfe"] },
-    { "tarih": "19.10.2025", "ogle_yemegi": ["Açık Büfe"] },
-    { "tarih": "20.10.2025", "ogle_yemegi": ["Sebze Çorbası", "Etli Nohut", "Bulgur", "Cacık"] },
-    { "tarih": "21.10.2025", "ogle_yemegi": ["Domates Çorba", "Tavuk Döner", "Pirinç Pilavı", "Ayran"] },
-    { "tarih": "22.10.2025", "ogle_yemegi": ["Şehriye Çorba", "Etli Mantı", "Patates Salatası", "Tatlı"] },
-    { "tarih": "23.10.2025", "ogle_yemegi": ["Ezogelin Çorba", "Etli Türlü", "Makarna", "Yoğurt"] },
-    { "tarih": "24.10.2025", "ogle_yemegi": ["Mantar Çorba", "Külbastı", "Pirinç Pilavı", "Ayran"] },
-    { "tarih": "25.10.2025", "ogle_yemegi": ["Açık Büfe"] },
-    { "tarih": "26.10.2025", "ogle_yemegi": ["Açık Büfe"] },
-    { "tarih": "27.10.2025", "ogle_yemegi": ["Domates Çorba", "Etli Kuru Fasulye", "Bulgur", "Yoğurt"] },
-    { "tarih": "28.10.2025", "ogle_yemegi": ["Açık Büfe (29 Ekim Cumhuriyet Bayramı)"] },
-    { "tarih": "29.10.2025", "ogle_yemegi": ["Açık Büfe (Resmî Tatil)"] },
-    { "tarih": "30.10.2025", "ogle_yemegi": ["Şehriye Çorba", "Orman Kebap", "Pirinç Pilavı", "Komposto"] },
-    { "tarih": "31.10.2025", "ogle_yemegi": ["Ezogelin Çorba", "Tavuk Sote", "Pirinç Pilavı", "Ayran"] }
-  ];
+  let yemekData = [];
 
   async function loadSchedule() {
     try {
@@ -508,9 +476,18 @@
     }
   }
 
-  function loadMeals() {
+  async function loadMeals() {
     try {
-      const data = yemekData;
+      console.log("Yemek listesi yükleniyor...");
+      const response = await fetch("./yemek.json?v=" + Date.now());
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      yemekData = await response.json();
+      console.log("Yemek verisi yüklendi:", yemekData);
+      
       const today = new Date();
       const gun = today.getDate();
       const ay = today.getMonth() + 1;
@@ -519,7 +496,9 @@
       
       console.log("Aranan tarih:", bugunStr);
       
-      const kayit = data.find(x => x.tarih === bugunStr);
+      const kayit = yemekData.find(x => x.tarih === bugunStr);
+      console.log("Bulunan kayıt:", kayit);
+      
       const liste = document.getElementById("yemekListesi");
       liste.innerHTML = "";
       
@@ -533,8 +512,8 @@
         liste.innerHTML = "<li>Bugün için yemek bilgisi yok.</li>";
       }
     } catch (error) {
-      console.error("Yemek listesi yüklenemedi:", error);
-      document.getElementById("yemekListesi").innerHTML = "<li>Yemek listesi yüklenemedi.</li>";
+      console.error("Yemek listesi yükleme hatası:", error);
+      document.getElementById("yemekListesi").innerHTML = `<li>Yemek listesi yüklenemedi: ${error.message}</li>`;
     }
   }
 
