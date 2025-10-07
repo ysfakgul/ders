@@ -476,7 +476,13 @@
   </div>
 
   <div id="updateBanner">🔄 Yeni sürüm mevcut! <button onclick="refreshApp()">Yenile</button></div>
-  <footer>Developed By Yusuf AKGÜL</footer>
+  
+  <footer>
+    <div class="footer-content">
+      <div>Developed By Yusuf AKGÜL</div>
+      <div class="active-users">👥 Aktif Kullanıcı: <span id="activeUsers">...</span></div>
+    </div>
+  </footer>
 
   <script>
   let schedule = [];
@@ -496,6 +502,74 @@
   ];
 
   let currentSozIndex = 0;
+  let sessionId = Math.random().toString(36).substring(7);
+  let activeUsersCount = 0;
+
+  // Pull-to-refresh için değişkenler
+  let startY = 0;
+  let currentY = 0;
+  let isPulling = false;
+
+  // Pull-to-refresh fonksiyonları
+  function handleTouchStart(e) {
+    if (window.scrollY === 0) {
+      startY = e.touches[0].pageY;
+      isPulling = true;
+    }
+  }
+
+  function handleTouchMove(e) {
+    if (!isPulling) return;
+    
+    currentY = e.touches[0].pageY;
+    const pullDistance = currentY - startY;
+    
+    if (pullDistance > 0 && window.scrollY === 0) {
+      e.preventDefault();
+      
+      // Görsel feedback için body'yi hafif aşağı kaydır
+      if (pullDistance < 100) {
+        document.body.style.transform = `translateY(${pullDistance / 2}px)`;
+        document.body.style.transition = 'none';
+      }
+    }
+  }
+
+  function handleTouchEnd(e) {
+    if (!isPulling) return;
+    
+    const pullDistance = currentY - startY;
+    
+    document.body.style.transform = '';
+    document.body.style.transition = 'transform 0.3s ease';
+    
+    if (pullDistance > 80) {
+      // Yenileme animasyonu
+      document.body.style.opacity = '0.5';
+      setTimeout(() => {
+        window.location.reload();
+      }, 300);
+    }
+    
+    isPulling = false;
+    startY = 0;
+    currentY = 0;
+  }
+
+  // Touch event listeners
+  document.addEventListener('touchstart', handleTouchStart, { passive: false });
+  document.addEventListener('touchmove', handleTouchMove, { passive: false });
+  document.addEventListener('touchend', handleTouchEnd);
+
+  // Aktif kullanıcı sayısını simüle et (gerçek API yerine)
+  function updateActiveUsers() {
+    // Gerçek bir backend olmadığı için rastgele bir sayı gösterelim
+    // Gerçek uygulamada burası bir API'den veri çekecek
+    const baseUsers = 15; // Temel kullanıcı sayısı
+    const randomVariation = Math.floor(Math.random() * 10) - 5; // -5 ile +5 arası değişim
+    activeUsersCount = Math.max(1, baseUsers + randomVariation);
+    document.getElementById('activeUsers').textContent = activeUsersCount;
+  }
 
   function startAtaturkSozleri() {
     const sozElement = document.getElementById('currentSoz');
@@ -698,7 +772,9 @@
   loadMeals();
   loadNobetci();
   startAtaturkSozleri();
+  updateActiveUsers();
   setInterval(updateClock, 1000);
+  setInterval(updateActiveUsers, 30000); // Her 30 saniyede bir güncelle
 
   if ("serviceWorker" in navigator) {
     let refreshing = false;
