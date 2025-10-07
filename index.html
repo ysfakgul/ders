@@ -890,73 +890,89 @@
     loading.textContent = '🍽️ Görsel yükleniyor...';
     
     try {
-      // Yemek adını İngilizce'ye çevir (basit sözlük)
-      const yemekSozluk = {
-        'çorba': 'soup',
-        'corbası': 'soup',
-        'sebze': 'vegetable',
-        'patates': 'potato',
-        'bulgur': 'bulgur',
-        'cacık': 'cacik',
-        'ezogelin': 'ezogelin soup',
-        'tavuk': 'chicken',
-        'sote': 'saute',
-        'pirinç': 'rice',
-        'pilav': 'pilaf',
-        'pilavı': 'pilaf',
-        'ayran': 'ayran',
-        'yayla': 'yayla soup',
-        'et': 'meat',
-        'komposto': 'compote',
-        'mercimek': 'lentil',
-        'külbastı': 'grilled meat',
-        'kuru fasulye': 'beans',
-        'meyhane': 'pilaf',
-        'köfte': 'meatball',
-        'tarhana': 'tarhana',
-        'mantı': 'manti',
-        'salata': 'salad',
-        'tatlı': 'dessert',
-        'şehriye': 'vermicelli',
-        'pırasa': 'leek',
-        'makarna': 'pasta',
-        'yoğurt': 'yogurt',
-        'domates': 'tomato',
-        'barbunya': 'beans',
-        'ıspanak': 'spinach',
-        'fırın': 'oven baked',
-        'nohut': 'chickpea',
-        'döner': 'doner',
-        'türlü': 'vegetable stew',
-        'mantar': 'mushroom'
-      };
+      // Yemek adını temizle
+      let yemekTemiz = yemekAdi
+        .toLowerCase()
+        .replace(/\(.*?\)/g, '')
+        .trim();
       
-      let searchTerm = yemekAdi.toLowerCase();
+      // Wikipedia'dan veya genel yemek görsel URL'i oluştur
+      // Edamam Recipe Search API (ücretsiz tier)
+      const searchTerm = encodeURIComponent(yemekTemiz + ' turkish food');
       
-      // Sözlükten çeviri yap
-      for (let [tr, en] of Object.entries(yemekSozluk)) {
-        if (searchTerm.includes(tr)) {
-          searchTerm = en;
-          break;
+      // TheMealDB API - ücretsiz ve key gerektirmez
+      const mealDbUrl = `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(yemekTemiz)}`;
+      
+      try {
+        const response = await fetch(mealDbUrl);
+        const data = await response.json();
+        
+        if (data.meals && data.meals.length > 0) {
+          // TheMealDB'den görsel bulundu
+          img.src = data.meals[0].strMealThumb;
+          img.onload = () => {
+            loading.style.display = 'none';
+            img.style.display = 'block';
+          };
+        } else {
+          // TheMealDB'de bulunamadı, Google Images benzeri servis kullan
+          throw new Error('Meal not found');
         }
+      } catch {
+        // Alternatif: Wikimedia Commons veya genel görsel
+        // Pexels proxy kullan (API key gerektirmeyen alternatif)
+        const pexelsQuery = encodeURIComponent(yemekTemiz + ' food');
+        const imageUrl = `https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400&h=300`;
+        
+        // Her yemek için farklı Pexels ID'ler kullan
+        const yemekIdMap = {
+          'sebze çorbası': '1640777',
+          'patates oturtma': '2741452',
+          'bulgur': '3926124',
+          'cacık': '4518843',
+          'ezogelin çorba': '2232433',
+          'tavuk sote': '2338407',
+          'pirinç pilavı': '1887506',
+          'ayran': '3738730',
+          'yayla çorba': '1640770',
+          'et sote': '1410235',
+          'komposto': '1132558',
+          'mercimek çorba': '3434523',
+          'külbastı': '1556688',
+          'etli kuru fasulye': '1860204',
+          'meyhane pilavı': '1887506',
+          'izmir köfte': '3928854',
+          'tarhana çorba': '2103949',
+          'mantı': '2092906',
+          'salata': '1640774',
+          'tatlı': '1126359',
+          'şehriye çorba': '2233729',
+          'pırasa': '3850835',
+          'makarna': '1437267',
+          'yoğurt': '821365',
+          'domates çorba': '2482102',
+          'barbunya yemeği': '4198019',
+          'ıspanak yemeği': '1359326',
+          'fırın tavuk but': '2374946',
+          'orman kebap': '3659862',
+          'etli nohut': '793785',
+          'tavuk döner': '2347311',
+          'etli mantı': '2092906',
+          'patates salatası': '2377165',
+          'etli türlü': '3622479',
+          'mantar çorba': '1640772'
+        };
+        
+        const pexelsId = yemekIdMap[yemekTemiz] || '1640777';
+        const finalUrl = `https://images.pexels.com/photos/${pexelsId}/pexels-photo-${pexelsId}.jpeg?auto=compress&cs=tinysrgb&w=400&h=300`;
+        
+        img.src = finalUrl;
+        img.onload = () => {
+          loading.style.display = 'none';
+          img.style.display = 'block';
+        };
       }
       
-      // Eğer çeviri bulunamadıysa genel "turkish food" kullan
-      if (searchTerm === yemekAdi.toLowerCase()) {
-        searchTerm = 'turkish food';
-      }
-      
-      console.log('Aranan yemek:', searchTerm);
-      
-      // Lorem Picsum ile yemek görseli (her seferinde farklı)
-      const randomSeed = encodeURIComponent(searchTerm + Date.now());
-      const imageUrl = `https://picsum.photos/seed/${randomSeed}/400/300`;
-      
-      img.src = imageUrl;
-      img.onload = () => {
-        loading.style.display = 'none';
-        img.style.display = 'block';
-      };
       img.onerror = () => {
         loading.textContent = '❌ Görsel yüklenemedi';
       };
