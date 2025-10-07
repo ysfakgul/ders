@@ -157,6 +157,34 @@
     text-align: center;
     margin: 3px 0;
     box-sizing: border-box;
+    transition: background 0.5s ease;
+  }
+
+  .container.teneffus {
+    background: linear-gradient(45deg, 
+      rgba(255, 0, 150, 0.3), 
+      rgba(0, 204, 255, 0.3), 
+      rgba(255, 204, 0, 0.3), 
+      rgba(0, 255, 136, 0.3)
+    );
+    background-size: 400% 400%;
+    animation: teneffusGradient 3s ease infinite;
+  }
+
+  @keyframes teneffusGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .container.teneffus h2::after {
+    content: " 🎉";
+    animation: bounce 1s ease infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
   }
 
   .current-date {
@@ -292,6 +320,7 @@
     box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     transition: all 0.3s ease;
     border-left: 3px solid rgba(255,221,64,0.6);
+    cursor: pointer;
   }
 
   .yemek-listesi li:hover {
@@ -300,12 +329,65 @@
     box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   }
 
+  .yemek-listesi li:active {
+    transform: scale(0.98);
+  }
+
   @media (max-width: 768px) {
     .yemek-listesi li {
       font-size: 0.85em;
       padding: 6px 10px;
       margin: 4px 0;
     }
+  }
+
+  .yemek-image-container {
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    display: none;
+  }
+
+  .yemek-image-container.show {
+    display: block;
+    animation: fadeIn 0.5s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .yemek-image-container img {
+    max-width: 100%;
+    height: auto;
+    max-height: 300px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    object-fit: cover;
+  }
+
+  .yemek-image-container .loading {
+    font-size: 1.2em;
+    color: var(--neon-color);
+  }
+
+  .yemek-image-container .close-btn {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+  }
+
+  .yemek-image-container .close-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: scale(1.05);
   }
 
   #nobetci {
@@ -489,6 +571,12 @@
   <div class="yemek-container">
     <h3>Bugünün Öğle Yemeği</h3>
     <ul class="yemek-listesi" id="yemekListesi"></ul>
+    <div class="yemek-image-container" id="yemekImageContainer">
+      <div class="loading" id="imageLoading">🍽️ Görsel yükleniyor...</div>
+      <img id="yemekImage" style="display: none;" alt="Yemek görseli">
+      <br>
+      <button class="close-btn" onclick="closeYemekImage()">Kapat</button>
+    </div>
     <div id="nobetci">
       <h4>👨‍🏫 Nöbetçi Müdür Yardımcısı</h4>
       <span id="nobetciAd"></span>
@@ -663,6 +751,7 @@
     const countdown = document.getElementById("countdown");
     const status = document.getElementById("status");
     const next = document.getElementById("nextLesson");
+    const container = document.querySelector(".container");
     
     document.getElementById('currentTime').textContent = `🕒 Şu an: ${now.toLocaleTimeString('tr-TR')}`;
 
@@ -672,6 +761,7 @@
       status.textContent = "";
       countdown.textContent = "";
       next.textContent = "";
+      container.classList.remove('teneffus');
       return;
     }
 
@@ -697,6 +787,13 @@
       const end = parseTime(ders.end);
       const kalan = Math.floor((end - now) / 1000);
       
+      // Teneffüs kontrolü
+      if (ders.label === "Teneffüs" || ders.type.includes("Teneffüs") || ders.type.includes("Öğle Arası")) {
+        container.classList.add('teneffus');
+      } else {
+        container.classList.remove('teneffus');
+      }
+      
       if (kalan > 0) {
         const dakika = Math.floor(kalan / 60);
         const saniye = kalan % 60;
@@ -710,6 +807,7 @@
         }
       }
     } else {
+      container.classList.remove('teneffus');
       // Ders arası veya okul öncesi/sonrası
       let nextDers = null;
       for (let i = 0; i < schedule.length; i++) {
