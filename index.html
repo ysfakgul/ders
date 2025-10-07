@@ -571,21 +571,66 @@
   <div class="yemek-container">
     <h3>Bugünün Öğle Yemeği</h3>
     <ul class="yemek-listesi" id="yemekListesi"></ul>
- <div id="yemekImageContainer" style="display:none; position:relative; margin-top:20px;">
-  <button id="closeYemekBtn" onclick="kapatYemekImage()"
-    style="
-      position:absolute; top:8px; right:8px;
-      background:#ef4444; color:white; border:none;
-      padding:6px 12px; border-radius:8px;
-      cursor:pointer; font-weight:bold;
-      box-shadow:0 2px 8px rgba(0,0,0,0.3);
-    ">
-    ✖ Kapat
-  </button>
-  
-  <div id="imageLoading" style="color:white; margin-top:40px;">Bir yemek seçin...</div>
+   <style>
+  #yemekImageContainer {
+    display: none;
+    position: relative;
+    background: #0f172a;
+    border: 1px solid #1e3a8a;
+    border-radius: 12px;
+    color: white;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  #closeYemekBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    color: #f87171;
+    transition: 0.2s;
+  }
+
+  #closeYemekBtn:hover {
+    color: #ef4444;
+    transform: scale(1.2);
+  }
+
+  #googleSearchResult a {
+    display: inline-block;
+    background: #1e3a8a;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+
+  #googleSearchResult a:hover {
+    background: #2563eb;
+  }
+</style>
+
+<div id="yemekImageContainer">
+  <button id="closeYemekBtn" onclick="kapatYemekImage()">✖</button>
+  <div id="imageLoading">Bir yemek seçin...</div>
   <div id="googleSearchResult"></div>
 </div>
+
+
     <div id="nobetci">
       <h4>👨‍🏫 Nöbetçi Müdür Yardımcısı</h4>
       <span id="nobetciAd"></span>
@@ -917,21 +962,10 @@ function showYemekImage(yemekAdi) {
   const yemekTemiz = temizleMetin(yemekAdi);
   const googleUrl = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(yemekTemiz + ' yemek')}`;
 
-  // iframe yerine bilgilendirme kutusu ve bağlantı göster
   loading.style.display = 'none';
   resultDiv.innerHTML = `
-    <div style="background:#111827; padding:15px; border-radius:12px; color:white; text-align:center;">
-      <h3 style="margin-bottom:10px;">🍲 ${yemekAdi} için Google Görseller</h3>
-      <p style="font-size:15px; color:#a5b4fc;">
-        <a href="${googleUrl}" target="_blank" style="color:#60a5fa; text-decoration:none;">
-          👉 Google Görseller’de Ara (${yemekTemiz})
-        </a>
-      </p>
-      <iframe
-        srcdoc="<style>body{margin:0;background:#000;display:flex;align-items:center;justify-content:center;flex-direction:column;font-family:sans-serif;color:white;}</style><img src='https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png' width='120'><p>Google sonuçlarını görmek için yukarıdaki bağlantıya tıklayın.</p>"
-        width="100%" height="300" style="border:none;border-radius:8px;">
-      </iframe>
-    </div>
+    <h3 style="margin-bottom:12px;">🍲 ${yemekAdi} için Google Görseller</h3>
+    <a href="${googleUrl}" target="_blank">🔍 Google Görseller’de Aç</a>
   `;
 }
 
