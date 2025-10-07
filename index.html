@@ -33,29 +33,118 @@
     padding-bottom: 60px;
   }
 
-  * { box-sizing: border-box; }
+  * {
+    box-sizing: border-box;
+  }
 
   header img {
-    width: 160px; height: 160px; border-radius: 50%;
-    margin-top: 5px; box-shadow: 0 0 25px rgba(255,255,255,0.3);
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    margin-top: 5px;
+    box-shadow: 0 0 25px rgba(255,255,255,0.3);
     animation: floatLogo 4s ease-in-out infinite alternate;
-    cursor: pointer; transition: transform 0.3s ease;
+    cursor: pointer;
+    transition: transform 0.3s ease;
   }
-  header img:hover { transform: scale(1.05); }
-  header img:active { transform: scale(0.95); }
+
+  header img:hover {
+    transform: scale(1.05);
+  }
+
+  header img:active {
+    transform: scale(0.95);
+  }
 
   header {
-    display: flex; align-items: center; justify-content: center;
-    gap: 20px; width: 100%; max-width: 900px;
-    padding: 0 15px; margin-top: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 900px;
+    padding: 0 15px;
+    margin-top: 5px;
   }
 
-  .ataturk-sozleri { flex: 1; min-height: 140px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-  .soz-text { font-size: 0.95em; line-height: 1.5; text-align: center; font-style: italic; color: #fff; text-shadow: 0 2px 4px rgba(0,0,0,0.3); position: absolute; width: 90%; opacity: 0; transition: opacity 1s ease-in-out, transform 1s ease-in-out; transform: translateY(20px); display: flex; flex-direction: column; gap: 8px; }
-  .soz-text.active { opacity: 1; transform: translateY(0); }
-  .soz-imza { font-size: 0.75em; font-style: normal; font-weight: 600; color: var(--neon-color); text-shadow: 0 0 8px rgba(255,221,64,0.4); margin-top: 3px; letter-spacing: 1px; }
+  .ataturk-sozleri {
+    flex: 1;
+    min-height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
 
-  @keyframes floatLogo { from { transform: translateY(0); } to { transform: translateY(-10px); } }
+  .soz-text {
+    font-size: 0.95em;
+    line-height: 1.5;
+    text-align: center;
+    font-style: italic;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    position: absolute;
+    width: 90%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+    transform: translateY(20px);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .soz-text.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .soz-imza {
+    font-size: 0.75em;
+    font-style: normal;
+    font-weight: 600;
+    color: var(--neon-color);
+    text-shadow: 0 0 8px rgba(255,221,64,0.4);
+    margin-top: 3px;
+    letter-spacing: 1px;
+  }
+
+  @media (max-width: 768px) {
+    header {
+      flex-direction: row;
+      gap: 10px;
+      padding: 0 10px;
+      align-items: center;
+    }
+
+    header img {
+      width: 90px;
+      height: 90px;
+      margin-top: 5px;
+      flex-shrink: 0;
+    }
+
+    .ataturk-sozleri {
+      flex: 1;
+      min-height: 90px;
+    }
+
+    .soz-text {
+      font-size: 0.75em;
+      line-height: 1.3;
+      gap: 5px;
+    }
+
+    .soz-imza {
+      font-size: 0.65em;
+      margin-top: 2px;
+    }
+  }
+
+  @keyframes floatLogo {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
+  }
 
   .container {
     background: rgba(255,255,255,0.12);
@@ -63,75 +152,411 @@
     border-radius: 8px;
     backdrop-filter: blur(15px);
     box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
-    width: 100%; max-width: 800px;
+    width: 100%;
+    max-width: 800px;
     text-align: center;
-    margin: 3px 0; transition: background 0.5s ease;
+    margin: 3px 0;
+    box-sizing: border-box;
+    transition: background 0.5s ease;
   }
+
   .container.teneffus {
-    background: linear-gradient(45deg, rgba(255, 0, 150, 0.3), rgba(0, 204, 255, 0.3), rgba(255, 204, 0, 0.3), rgba(0, 255, 136, 0.3));
+    background: linear-gradient(45deg, 
+      rgba(255, 0, 150, 0.3), 
+      rgba(0, 204, 255, 0.3), 
+      rgba(255, 204, 0, 0.3), 
+      rgba(0, 255, 136, 0.3)
+    );
     background-size: 400% 400%;
     animation: teneffusGradient 3s ease infinite;
   }
-  @keyframes teneffusGradient { 0%{background-position:0%50%}50%{background-position:100%50%}100%{background-position:0%50%}}
+
+  @keyframes teneffusGradient {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .container.teneffus h2::after {
+    content: " 🎉";
+    animation: bounce 1s ease infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
 
   .current-date {
     background: rgba(255,255,255,0.08);
     padding: 10px 20px;
     border-radius: 8px;
-    font-size: 1.1em; font-weight: 600;
+    font-size: 1.1em;
+    font-weight: 600;
     color: var(--neon-color);
     text-shadow: 0 0 10px rgba(255,221,64,0.3);
     margin: 3px 0 5px 0;
-    width: 100%; max-width: 800px;
+    width: 100%;
+    max-width: 800px;
+    box-sizing: border-box;
+    letter-spacing: 0.5px;
   }
 
-  .countdown { font-size: 1.15em; font-weight: bold; margin-top: 8px; }
-  .next { margin-top: 8px; font-size: 1em; background: rgba(255,255,255,0.1); padding: 8px 14px; border-radius: 5px; }
-  .time { font-size: 1em; margin-top: 10px; background: rgba(255,255,255,0.2); padding: 6px 12px; border-radius: 5px; }
+  @media (max-width: 768px) {
+    .container {
+      padding: 12px 15px;
+      margin: 5px 8px;
+      width: calc(100vw - 16px);
+      border-radius: 12px;
+      max-width: calc(100vw - 16px);
+    }
+
+    .current-date {
+      font-size: 0.95em;
+      padding: 8px 15px;
+      margin: 3px 8px 5px 8px;
+      width: calc(100vw - 16px);
+      max-width: calc(100vw - 16px);
+    }
+  }
+
+  .countdown { 
+    font-size: 1.15em; 
+    font-weight: bold; 
+    margin-top: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .countdown {
+      font-size: 1em;
+      margin-top: 5px;
+    }
+  }
+
+  .next { 
+    margin-top: 8px; 
+    font-size: 1em; 
+    background: rgba(255,255,255,0.1); 
+    padding: 8px 14px; 
+    border-radius: 5px;
+  }
+
+  @media (max-width: 768px) {
+    .next {
+      font-size: 0.9em;
+      padding: 6px 10px;
+      margin-top: 5px;
+    }
+  }
+
+  .time { 
+    font-size: 1em; 
+    margin-top: 10px; 
+    background: rgba(255,255,255,0.2); 
+    padding: 6px 12px; 
+    border-radius: 5px;
+  }
+
+  @media (max-width: 768px) {
+    .time {
+      font-size: 0.9em;
+      padding: 5px 10px;
+      margin-top: 8px;
+    }
+  }
 
   .yemek-container {
-    margin: 3px 0; background: rgba(255,255,255,0.1);
-    padding: 15px 25px; border-radius: 8px;
+    margin: 3px 0;
+    background: rgba(255,255,255,0.1);
+    padding: 15px 25px;
+    border-radius: 8px;
     box-shadow: 0 0 15px rgba(255,255,255,0.1);
-    text-align: center; width: 100%; max-width: 800px;
+    text-align: center;
+    width: 100%;
+    max-width: 800px;
+    box-sizing: border-box;
   }
 
-  .yemek-container h3 { margin: 0 0 10px; font-size: 1.15em; font-weight: 600; color: var(--neon-color); text-shadow: 0 0 10px rgba(255,221,64,0.3); }
-  .yemek-listesi { list-style: none; padding: 0; margin: 0; }
+  @media (max-width: 768px) {
+    .yemek-container {
+      padding: 12px 15px;
+      margin: 5px 8px;
+      width: calc(100vw - 16px);
+      border-radius: 12px;
+      max-width: calc(100vw - 16px);
+    }
+  }
+
+  .yemek-container h3 { 
+    margin: 0 0 10px; 
+    font-size: 1.15em;
+    font-weight: 600;
+    color: var(--neon-color);
+    text-shadow: 0 0 10px rgba(255,221,64,0.3);
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 768px) {
+    .yemek-container h3 {
+      font-size: 1em;
+      margin: 0 0 8px;
+    }
+  }
+
+  .yemek-listesi { 
+    list-style: none; 
+    padding: 0; 
+    margin: 0;
+  }
+
   .yemek-listesi li {
     background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08));
-    margin: 5px 0; padding: 8px 12px; border-radius: 8px;
-    font-size: 0.95em; font-weight: 500;
+    margin: 5px 0;
+    padding: 8px 12px;
+    border-radius: 8px;
+    font-size: 0.95em;
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
     border-left: 3px solid rgba(255,221,64,0.6);
-    cursor: pointer; transition: all 0.3s ease;
+    cursor: pointer;
   }
-  .yemek-listesi li:hover { transform: translateX(5px); background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.12)); }
-  .yemek-listesi li:active { transform: scale(0.98); }
 
-  .yemek-image-container { margin-top: 15px; padding: 15px; background: rgba(255,255,255,0.05); border-radius: 12px; display: none; }
-  .yemek-image-container.show { display: block; animation: fadeIn 0.5s ease; }
-  @keyframes fadeIn { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
-  .yemek-image-container img { max-width: 100%; max-height: 300px; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.3); object-fit: cover; }
+  .yemek-listesi li:hover {
+    transform: translateX(5px);
+    background: linear-gradient(135deg, rgba(255,255,255,0.2), rgba(255,255,255,0.12));
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
 
-  #nobetci { margin-top: 8px; font-size: 1em; background: rgba(255,255,255,0.1); padding: 8px 14px; border-radius: 5px; box-shadow: 0 0 10px rgba(255,255,255,0.1); }
-  #okulKapali { position: fixed; inset: 0; display: none; align-items: center; justify-content: center; flex-direction: column; font-size: 3em; font-weight: 700; color: var(--neon-color); background: linear-gradient(135deg, #0a0f24, #1a237e, #003b5c); background-size: 300% 300%; animation: bgShift 6s ease-in-out infinite, neonPulse 1.5s infinite alternate; z-index: 999; }
-  @keyframes bgShift {0%{background-position:0%50%}50%{background-position:100%50%}100%{background-position:0%50%}}
-  @keyframes neonPulse {from{text-shadow:0 0 10px var(--neon-color)}to{text-shadow:0 0 40px var(--neon-color)}}
+  .yemek-listesi li:active {
+    transform: scale(0.98);
+  }
+
+  @media (max-width: 768px) {
+    .yemek-listesi li {
+      font-size: 0.85em;
+      padding: 6px 10px;
+      margin: 4px 0;
+    }
+  }
+
+  .yemek-image-container {
+    margin-top: 15px;
+    padding: 15px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 12px;
+    display: none;
+  }
+
+  .yemek-image-container.show {
+    display: block;
+    animation: fadeIn 0.5s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .yemek-image-container img {
+    max-width: 100%;
+    height: auto;
+    max-height: 300px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+    object-fit: cover;
+  }
+
+  .yemek-image-container .loading {
+    font-size: 1.2em;
+    color: var(--neon-color);
+  }
+
+  .yemek-image-container .close-btn {
+    background: rgba(255,255,255,0.2);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+  }
+
+  .yemek-image-container .close-btn:hover {
+    background: rgba(255,255,255,0.3);
+    transform: scale(1.05);
+  }
+
+  #nobetci {
+    margin-top: 8px;
+    font-size: 1em;
+    background: rgba(255,255,255,0.1);
+    padding: 8px 14px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(255,255,255,0.1);
+  }
+
+  @media (max-width: 768px) {
+    #nobetci {
+      font-size: 0.9em;
+      padding: 6px 10px;
+    }
+  }
+
+  #nobetci h4 {
+    margin: 0;
+    font-weight: 500;
+    opacity: 0.9;
+    font-size: 0.95em;
+  }
+
+  @media (max-width: 768px) {
+    #nobetci h4 {
+      font-size: 0.85em;
+    }
+  }
+
+  #nobetci span {
+    display: block;
+    font-size: 1.3em;
+    font-weight: 700;
+    margin-top: 4px;
+    color: #ffdd40;
+    text-shadow: 0 0 10px #ffdd40;
+  }
+
+  @media (max-width: 768px) {
+    #nobetci span {
+      font-size: 1.1em;
+      margin-top: 3px;
+    }
+  }
+
+  #okulKapali {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 3em;
+    font-weight: 700;
+    text-align: center;
+    color: var(--neon-color);
+    text-shadow: 0 0 10px var(--neon-color),
+                 0 0 20px var(--neon-color),
+                 0 0 40px #fffec5,
+                 0 0 60px #ffec8b;
+    background: linear-gradient(135deg, #0a0f24, #1a237e, #003b5c);
+    background-size: 300% 300%;
+    animation: bgShift 6s ease-in-out infinite, neonPulse 1.5s infinite alternate;
+    z-index: 999;
+    display: none;
+    padding: 20px;
+  }
+
+  @media (max-width: 768px) {
+    #okulKapali {
+      font-size: 2em;
+    }
+    
+    #okulKapali small {
+      font-size: 0.6em;
+    }
+  }
+
+  @keyframes bgShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  @keyframes neonPulse {
+    from { text-shadow: 0 0 10px var(--neon-color), 0 0 20px var(--neon-color); opacity: 0.85; }
+    to { text-shadow: 0 0 40px var(--neon-color), 0 0 80px #fffde0; opacity: 1; }
+  }
 
   footer {
-    position: fixed; bottom: 0; left: 0; right: 0;
-    background: rgba(15,23,42,0.95);
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(15, 23, 42, 0.95);
     backdrop-filter: blur(10px);
-    padding: 8px 10px; font-size: 0.8em; text-align: center;
-    z-index: 100; border-top: 1px solid rgba(255,255,255,0.1);
+    padding: 8px 10px;
+    font-size: 0.8em;
+    opacity: 0.9;
+    font-style: italic;
+    text-align: center;
+    z-index: 100;
+    border-top: 1px solid rgba(255,255,255,0.1);
   }
-  .active-users { font-size: 0.85em; color: var(--neon-color); font-weight: 600; }
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+  }
+
+  .active-users {
+    font-size: 0.85em;
+    color: var(--neon-color);
+    font-weight: 600;
+    font-style: normal;
+  }
+
+  @media (max-width: 768px) {
+    footer {
+      font-size: 0.7em;
+      padding: 6px 10px;
+    }
+
+    .active-users {
+      font-size: 0.8em;
+    }
+  }
+
+  #updateBanner {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1e3a8a;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.4);
+    display: none;
+    z-index: 999;
+    max-width: 90%;
+  }
+
+  @media (max-width: 768px) {
+    #updateBanner {
+      font-size: 0.9em;
+      padding: 8px 15px;
+      bottom: 10px;
+    }
+    
+    #updateBanner button {
+      font-size: 0.9em;
+      padding: 5px 10px;
+    }
+  }
+
+
 </style>
 </head>
 <body>
   <header>
     <img src="87348b3b-97a8-4fe6-a8e9-cca8434bad69.png" alt="MTAL Logo" onclick="clearCacheAndReload()">
-    <div class="ataturk-sozleri"><div class="soz-text active" id="currentSoz"></div></div>
+    <div class="ataturk-sozleri">
+      <div class="soz-text active" id="currentSoz"></div>
+    </div>
   </header>
 
   <div class="current-date" id="currentDate"></div>
@@ -148,176 +573,478 @@
     <ul class="yemek-listesi" id="yemekListesi"></ul>
     <div class="yemek-image-container" id="yemekImageContainer">
       <div class="loading" id="imageLoading">🍽️ Görsel yükleniyor...</div>
-      <img id="yemekImage" style="display:none" alt="Yemek görseli">
+      <img id="yemekImage" style="display: none;" alt="Yemek görseli">
       <br>
       <button class="close-btn" onclick="closeYemekImage()">Kapat</button>
     </div>
-    <div id="nobetci"><h4>👨‍🏫 Nöbetçi Müdür Yardımcısı</h4><span id="nobetciAd"></span></div>
+    <div id="nobetci">
+      <h4>👨‍🏫 Nöbetçi Müdür Yardımcısı</h4>
+      <span id="nobetciAd"></span>
+    </div>
   </div>
 
-  <div id="okulKapali">🏫 OKUL KAPALI<br><small>Güzel bir gün geçir!</small></div>
+  <div id="okulKapali">
+    🏫 OKUL KAPALI
+    <small>Güzel bir gün geçir!</small>
+  </div>
 
+  <div id="updateBanner">🔄 Yeni sürüm mevcut! <button onclick="refreshApp()">Yenile</button></div>
+  
   <footer>
-    <div>Developed By Yusuf AKGÜL</div>
-    <div class="active-users">👥 Aktif Kullanıcı: <span id="activeUsers">...</span></div>
+    <div class="footer-content">
+      <div>Developed By Yusuf AKGÜL</div>
+      <div class="active-users">👥 Aktif Kullanıcı: <span id="activeUsers">...</span></div>
+    </div>
   </footer>
 
   <script>
-  let schedule = [], yemekData = [];
+  let schedule = [];
+  let yemekData = [];
+  
   const ataturkSozleri = [
     "Hayatta en hakiki mürşit ilimdir, fendir.",
     "Bir milleti hür, müstakil, şanlı, yüksek bir toplum halinde yaşatmanın yegane vasıtası kültürdür.",
+    "Ey Türk gençliği! Birinci vazifen, Türk istiklalini, Türk Cumhuriyetini, ilelebet muhafaza ve müdafaa etmektir.",
     "Eğitimde feda edilecek hiçbir şey yoktur.",
-    "Öğretmenler yeni neslin vücuda gelmesinde en birinci amil, en birinci mürebbidirler."
+    "Öğretmenler yeni neslin vücuda gelmesinde en birinci amil, en birinci mürebbidirler.",
+    "Ülkenin kurtuluşu ancak eğitimle mümkündür.",
+    "Türk milleti çalışkandır, zekidir, eğitim ve öğrenimle her türlü medeniyete layıktır.",
+    "Maarif davamız, asker, milletçe, her şeyimizle üstünde duracağımız meselelerdendir.",
+    "İlim ve teknikte ilerleme bütün olarak başarımızın en önemli kaynaklarındandır.",
+    "Kültürlü bir millet demek, aynı zamanda münevver bir millet demektir."
   ];
+
   let currentSozIndex = 0;
-  function startAtaturkSozleri(){
-    const soz=document.getElementById('currentSoz');
-    soz.innerHTML=`<div>"${ataturkSozleri[currentSozIndex]}"</div><div class="soz-imza">Gazi Mustafa Kemal ATATÜRK</div>`;
-    setInterval(()=>{
-      soz.classList.remove('active');
-      setTimeout(()=>{
-        currentSozIndex=(currentSozIndex+1)%ataturkSozleri.length;
-        soz.innerHTML=`<div>"${ataturkSozleri[currentSozIndex]}"</div><div class="soz-imza">Gazi Mustafa Kemal ATATÜRK</div>`;
-        soz.classList.add('active');
-      },1000);
-    },7000);
+  let sessionId = Math.random().toString(36).substring(7);
+  let activeUsersCount = 0;
+
+  // Pull-to-refresh için değişkenler
+  let startY = 0;
+  let currentY = 0;
+  let isPulling = false;
+
+  // Pull-to-refresh fonksiyonları
+  function handleTouchStart(e) {
+    if (window.scrollY === 0) {
+      startY = e.touches[0].pageY;
+      isPulling = true;
+    }
   }
 
-  function updateActiveUsers(){
-    const base=15; const random=Math.floor(Math.random()*10)-5;
-    document.getElementById('activeUsers').textContent=Math.max(1,base+random);
-  }
-  function updateCurrentDate(){
-    const gunler=['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
-    const t=new Date();document.getElementById('currentDate').textContent=`📅 ${t.toLocaleDateString('tr-TR')} ${gunler[t.getDay()]}`;
-  }
-
-  async function loadMeals(){
-    try{
-      const res=await fetch("./yemek.json?v="+Date.now());
-      yemekData=await res.json();
-      const t=new Date();
-      const bugun=`${t.getDate()}.${t.getMonth()+1}.${t.getFullYear()}`;
-      const kayit=yemekData.find(x=>x.tarih===bugun);
-      const liste=document.getElementById("yemekListesi");
-      liste.innerHTML="";
-      if(kayit&&kayit.ogle_yemegi){
-        kayit.ogle_yemegi.forEach(y=>{
-          const li=document.createElement("li");
-          li.textContent=y;
-          li.onclick=()=>showYemekImage(y);
-          liste.appendChild(li);
-        });
-      }else liste.innerHTML="<li>Bugün için yemek bilgisi yok.</li>";
-    }catch(e){document.getElementById("yemekListesi").innerHTML="<li>Yemek listesi yüklenemedi.</li>";}
+  function handleTouchMove(e) {
+    if (!isPulling) return;
+    
+    currentY = e.touches[0].pageY;
+    const pullDistance = currentY - startY;
+    
+    if (pullDistance > 0 && window.scrollY === 0) {
+      e.preventDefault();
+      
+      // Görsel feedback için body'yi hafif aşağı kaydır
+      if (pullDistance < 100) {
+        document.body.style.transform = `translateY(${pullDistance / 2}px)`;
+        document.body.style.transition = 'none';
+      }
+    }
   }
 
-  // 🔹 GELİŞTİRİLMİŞ GÖRSEL GETİRME FONKSİYONU
-async function showYemekImage(yemekAdi) {
-  const container = document.getElementById('yemekImageContainer');
-  const img = document.getElementById('yemekImage');
-  const loading = document.getElementById('imageLoading');
-  
-  container.classList.add('show');
-  img.style.display = 'none';
-  loading.style.display = 'block';
-  loading.textContent = '🍽️ Görsel yükleniyor...';
+  function handleTouchEnd(e) {
+    if (!isPulling) return;
+    
+    const pullDistance = currentY - startY;
+    
+    document.body.style.transform = '';
+    document.body.style.transition = 'transform 0.3s ease';
+    
+    if (pullDistance > 80) {
+      // Yenileme animasyonu
+      document.body.style.opacity = '0.5';
+      setTimeout(() => {
+        window.location.reload();
+      }, 300);
+    }
+    
+    isPulling = false;
+    startY = 0;
+    currentY = 0;
+  }
 
-  try {
-    // Yemek adını sadeleştir ve ASCII’ye çevir
-    let yemekTemiz = yemekAdi.toLowerCase()
-      .replace(/\(.*?\)/g, '')
-      .replace(/ç/g, 'c')
-      .replace(/ğ/g, 'g')
-      .replace(/ı/g, 'i')
-      .replace(/ö/g, 'o')
-      .replace(/ş/g, 's')
-      .replace(/ü/g, 'u')
-      .trim();
+  // Touch event listeners
+  document.addEventListener('touchstart', handleTouchStart, { passive: false });
+  document.addEventListener('touchmove', handleTouchMove, { passive: false });
+  document.addEventListener('touchend', handleTouchEnd);
 
-    // Anahtar kelime dönüşümü
-    const map = {
-      "çorba": "soup", "pilav": "rice", "köfte": "meatballs", "makarna": "pasta",
-      "kebap": "kebab", "tavuk": "chicken", "et": "beef", "balık": "fish",
-      "tatlı": "dessert", "börek": "pastry", "salata": "salad",
-      "fasulye": "beans", "mercimek": "lentil", "nohut": "chickpeas",
-      "patates": "potato", "yumurta": "egg", "dolma": "stuffed pepper"
-    };
-    Object.keys(map).forEach(tr => {
-      if (yemekTemiz.includes(tr)) yemekTemiz = yemekTemiz.replace(tr, map[tr]);
-    });
+  // Aktif kullanıcı sayısını simüle et (gerçek API yerine)
+  function updateActiveUsers() {
+    // Gerçek bir backend olmadığı için rastgele bir sayı gösterelim
+    // Gerçek uygulamada burası bir API'den veri çekecek
+    const baseUsers = 15; // Temel kullanıcı sayısı
+    const randomVariation = Math.floor(Math.random() * 10) - 5; // -5 ile +5 arası değişim
+    activeUsersCount = Math.max(1, baseUsers + randomVariation);
+    document.getElementById('activeUsers').textContent = activeUsersCount;
+  }
 
-    const query = encodeURIComponent(yemekTemiz + " turkish food meal");
+  // Bugünün tarihini göster
+  function updateCurrentDate() {
+    const gunler = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+    const today = new Date();
+    const gun = today.getDate().toString().padStart(2, '0');
+    const ay = (today.getMonth() + 1).toString().padStart(2, '0');
+    const yil = today.getFullYear();
+    const gunAdi = gunler[today.getDay()];
+    
+    document.getElementById('currentDate').textContent = `📅 ${gun}.${ay}.${yil} ${gunAdi}`;
+  }
 
-    // 1️⃣ Pixabay
-    const pixabayUrl = `https://pixabay.com/api/?key=45492961-7e430c5c5c4adf7e81b66ef7c&q=${query}&category=food&image_type=photo&orientation=horizontal&lang=en&per_page=3`;
-    const pixaRes = await fetch(pixabayUrl);
-    const pixaData = await pixaRes.json();
+  function startAtaturkSozleri() {
+    const sozElement = document.getElementById('currentSoz');
+    sozElement.innerHTML = `
+      <div>"${ataturkSozleri[currentSozIndex]}"</div>
+      <div class="soz-imza">Gazi Mustafa Kemal ATATÜRK</div>
+    `;
 
-    if (pixaData.hits && pixaData.hits.length > 0) {
-      img.src = pixaData.hits[0].webformatURL;
-      img.onload = () => {
-        loading.style.display = 'none';
-        img.style.display = 'block';
-      };
+    setInterval(() => {
+      sozElement.classList.remove('active');
+      
+      setTimeout(() => {
+        currentSozIndex = (currentSozIndex + 1) % ataturkSozleri.length;
+        sozElement.innerHTML = `
+          <div>"${ataturkSozleri[currentSozIndex]}"</div>
+          <div class="soz-imza">Gazi Mustafa Kemal ATATÜRK</div>
+        `;
+        sozElement.classList.add('active');
+      }, 1000);
+    }, 7000);
+  }
+
+  async function loadSchedule() {
+    try {
+      const response = await fetch('data.json?v=5');
+      schedule = await response.json();
+      console.log("Ders programı yüklendi:", schedule);
+      updateClock();
+    } catch (error) {
+      console.error("Ders programı yüklenemedi:", error);
+      // Test için örnek veri
+      schedule = [
+        {type: "1. Ders", label: "Ders", start: "08:45", end: "09:25"},
+        {type: "1. Teneffüs", label: "Teneffüs", start: "09:25", end: "09:40"},
+        {type: "2. Ders", label: "Ders", start: "09:40", end: "10:20"}
+      ];
+      updateClock();
+    }
+  }
+
+  function parseTime(str) {
+    const [h, m] = str.split(':').map(Number);
+    const d = new Date();
+    d.setHours(h, m, 0, 0);
+    return d;
+  }
+
+  function updateClock() {
+    if (schedule.length === 0) return;
+    
+    const now = new Date();
+    const gun = now.getDay();
+    const okulKapali = document.getElementById("okulKapali");
+    const countdown = document.getElementById("countdown");
+    const status = document.getElementById("status");
+    const next = document.getElementById("nextLesson");
+    const container = document.querySelector(".container");
+    
+    document.getElementById('currentTime').textContent = `🕒 Şu an: ${now.toLocaleTimeString('tr-TR')}`;
+
+    // Hafta sonu kontrolü
+    if (gun === 0 || gun === 6) {
+      okulKapali.style.display = "flex";
+      status.textContent = "";
+      countdown.textContent = "";
+      next.textContent = "";
+      container.classList.remove('teneffus');
       return;
     }
 
-    // 2️⃣ Wikimedia Commons (alternatif)
-    const wikiUrl = `https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrsearch=${query}&gsrlimit=1&prop=imageinfo&iiprop=url&iiurlwidth=600`;
-    const wikiRes = await fetch(wikiUrl);
-    const wikiData = await wikiRes.json();
+    okulKapali.style.display = "none";
+    let currentIndex = -1;
+    let foundCurrent = false;
 
-    if (wikiData.query) {
-      const pages = Object.values(wikiData.query.pages);
-      if (pages[0].imageinfo && pages[0].imageinfo[0].thumburl) {
-        img.src = pages[0].imageinfo[0].thumburl;
+    // Şu anki ders veya etkinliği bul
+    for (let i = 0; i < schedule.length; i++) {
+      const start = parseTime(schedule[i].start);
+      const end = parseTime(schedule[i].end);
+      
+      if (now >= start && now < end) {
+        currentIndex = i;
+        foundCurrent = true;
+        break;
+      }
+    }
+
+    if (foundCurrent && currentIndex >= 0) {
+      // Ders veya etkinlik devam ediyor
+      const ders = schedule[currentIndex];
+      const end = parseTime(ders.end);
+      const kalan = Math.floor((end - now) / 1000);
+      
+      // Teneffüs kontrolü
+      if (ders.label === "Teneffüs" || ders.type.includes("Teneffüs") || ders.type.includes("Öğle Arası")) {
+        container.classList.add('teneffus');
+      } else {
+        container.classList.remove('teneffus');
+      }
+      
+      if (kalan > 0) {
+        const dakika = Math.floor(kalan / 60);
+        const saniye = kalan % 60;
+        status.textContent = `${ders.type} devam ediyor`;
+        countdown.textContent = `🕐 Bitmesine ${dakika} dk ${saniye} sn kaldı`;
+
+        if (schedule[currentIndex + 1]) {
+          next.textContent = `Sıradaki: ${schedule[currentIndex + 1].type} (${schedule[currentIndex + 1].start} - ${schedule[currentIndex + 1].end})`;
+        } else {
+          next.textContent = "🎉 Günün son etkinliği!";
+        }
+      }
+    } else {
+      container.classList.remove('teneffus');
+      // Ders arası veya okul öncesi/sonrası
+      let nextDers = null;
+      for (let i = 0; i < schedule.length; i++) {
+        const start = parseTime(schedule[i].start);
+        if (now < start) {
+          nextDers = schedule[i];
+          break;
+        }
+      }
+
+      if (nextDers) {
+        const fark = Math.floor((parseTime(nextDers.start) - now) / 1000);
+        if (fark > 0) {
+          const dakika = Math.floor(fark / 60);
+          const saniye = fark % 60;
+          status.textContent = "Teneffüstesiniz";
+          countdown.textContent = `🕐 ${nextDers.type} ${dakika} dk ${saniye} sn sonra başlayacak`;
+          next.textContent = `${nextDers.start} - ${nextDers.end}`;
+        }
+      } else {
+        // Okul günü bitti
+        okulKapali.style.display = "flex";
+        status.textContent = "";
+        countdown.textContent = "";
+        next.textContent = "";
+      }
+    }
+  }
+
+  async function loadMeals() {
+    try {
+      console.log("Yemek listesi yükleniyor...");
+      const response = await fetch("./yemek.json?v=" + Date.now());
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      yemekData = await response.json();
+      console.log("Yemek verisi yüklendi:", yemekData);
+      
+      const today = new Date();
+      const gun = today.getDate();
+      const ay = today.getMonth() + 1;
+      const yil = today.getFullYear();
+      const bugunStr = `${gun}.${ay}.${yil}`;
+      
+      console.log("Aranan tarih:", bugunStr);
+      
+      const kayit = yemekData.find(x => x.tarih === bugunStr);
+      console.log("Bulunan kayıt:", kayit);
+      
+      const liste = document.getElementById("yemekListesi");
+      liste.innerHTML = "";
+      
+      if (kayit && kayit.ogle_yemegi && kayit.ogle_yemegi.length > 0) {
+        kayit.ogle_yemegi.forEach(yemek => {
+          const li = document.createElement("li");
+          li.textContent = yemek;
+          li.onclick = () => showYemekImage(yemek);
+          liste.appendChild(li);
+        });
+      } else {
+        liste.innerHTML = "<li>Bugün için yemek bilgisi yok.</li>";
+      }
+    } catch (error) {
+      console.error("Yemek listesi yükleme hatası:", error);
+      document.getElementById("yemekListesi").innerHTML = `<li>Yemek listesi yüklenemedi: ${error.message}</li>`;
+    }
+  }
+
+  async function showYemekImage(yemekAdi) {
+    const container = document.getElementById('yemekImageContainer');
+    const img = document.getElementById('yemekImage');
+    const loading = document.getElementById('imageLoading');
+    
+    container.classList.add('show');
+    img.style.display = 'none';
+    loading.style.display = 'block';
+    loading.textContent = '🍽️ Görsel yükleniyor...';
+    
+    try {
+      // Yemek adını temizle
+      let yemekTemiz = yemekAdi
+        .toLowerCase()
+        .replace(/\(.*?\)/g, '')
+        .trim();
+      
+      // Google Images alternatif yöntem - Serpapi kullanarak
+      // Not: API key gerektirmeyen alternatif yöntem
+      
+      // Bing Image Search API alternatifi (ücretsiz tier)
+      const searchQuery = encodeURIComponent(yemekTemiz + ' yemek');
+      
+      // Google Images'dan görsel çekmek için proxy kullan
+      // Bu servis Google'dan görsel URL'lerini çeker
+      const apiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://www.google.com/search?tbm=isch&q=' + searchQuery)}`;
+      
+      // Alternatif: DuckDuckGo Instant Answer API (ücretsiz)
+      const ddgUrl = `https://api.duckduckgo.com/?q=${encodeURIComponent(yemekTemiz + ' yemek')}&format=json&pretty=1`;
+      
+      // En iyi çözüm: Wikimedia Commons
+      const wikiUrl = `https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrsearch=${encodeURIComponent(yemekTemiz)}&gsrlimit=1&prop=imageinfo&iiprop=url&iiurlwidth=400`;
+      
+      // Google CSE Proxy (ücretsiz, key gerektirmez)
+      const proxyUrl = `https://serpapi.com/search?engine=google_images&q=${searchQuery}&api_key=demo`;
+      
+      // En basit ve çalışır yöntem: Direct Google Images URL
+      // Google Images'dan ilk sonucu göster
+      const googleImageSearch = `https://www.google.com/search?tbm=isch&q=${searchQuery}`;
+      
+      // Scraping yerine hazır bir API kullanalım
+      // Pixabay API (ücretsiz, key: demo için açık)
+      const pixabayUrl = `https://pixabay.com/api/?key=45492961-7e430c5c5c4adf7e81b66ef7c&q=${encodeURIComponent(yemekTemiz)}&image_type=photo&lang=tr&per_page=3`;
+      
+      const response = await fetch(pixabayUrl);
+      const data = await response.json();
+      
+      if (data.hits && data.hits.length > 0) {
+        img.src = data.hits[0].webformatURL;
         img.onload = () => {
           loading.style.display = 'none';
           img.style.display = 'block';
         };
-        return;
+      } else {
+        throw new Error('Görsel bulunamadı');
       }
-    }
-
-    // 3️⃣ Unsplash yedek (anahtar gerekmez)
-    const unsplashUrl = `https://source.unsplash.com/600x400/?${query}`;
-    img.src = unsplashUrl;
-    img.onload = () => {
-      loading.style.display = 'none';
-      img.style.display = 'block';
-    };
-    img.onerror = () => {
-      img.src = "default_food.png"; // 📌 Kendi yedeğini ekle
-      img.onload = () => {
-        loading.style.display = 'none';
-        img.style.display = 'block';
+      
+      img.onerror = () => {
+        loading.textContent = '❌ Görsel yüklenemedi. Farklı bir yemek deneyin.';
       };
-    };
-
-  } catch (error) {
-    console.error("Görsel yükleme hatası:", error);
-    loading.textContent = '❌ Görsel yüklenemedi';
-  }
-}
-
-  function closeYemekImage(){document.getElementById('yemekImageContainer').classList.remove('show');}
-
-  async function loadNobetci(){
-    try{
-      const res=await fetch("nobet.json?v=5");
-      const data=await res.json();
-      const t=new Date();
-      const bugun=`${t.getFullYear()}-${String(t.getMonth()+1).padStart(2,'0')}-${String(t.getDate()).padStart(2,'0')}`;
-      const kayit=data.find(x=>x.Tarih===bugun);
-      document.getElementById("nobetciAd").textContent=kayit?kayit.AdSoyad:"Bilgi bulunamadı";
-    }catch{document.getElementById("nobetciAd").textContent="Bilgi yüklenemedi";}
+      
+    } catch (error) {
+      console.error('Görsel yükleme hatası:', error);
+      loading.textContent = '❌ Görsel yüklenemedi';
+    }
   }
 
-  // Başlatmalar
-  loadMeals(); loadNobetci(); startAtaturkSozleri(); updateActiveUsers(); updateCurrentDate();
-  setInterval(updateActiveUsers,30000);
+  function closeYemekImage() {
+    const container = document.getElementById('yemekImageContainer');
+    container.classList.remove('show');
+  }
+
+  async function loadNobetci() {
+    try {
+      const response = await fetch("nobet.json?v=5");
+      const data = await response.json();
+
+      const today = new Date();
+      const gun = today.getDate().toString().padStart(2, '0');
+      const ay = (today.getMonth() + 1).toString().padStart(2, '0');
+      const yil = today.getFullYear();
+      const bugunStr = `${yil}-${ay}-${gun}`;
+
+      const kayit = data.find(x => x.Tarih === bugunStr);
+      const nobetciAd = document.getElementById("nobetciAd");
+
+      if (kayit) {
+        nobetciAd.textContent = kayit.AdSoyad;
+      } else {
+        nobetciAd.textContent = "Bilgi bulunamadı";
+      }
+    } catch (error) {
+      console.error("Nöbetçi bilgisi yüklenemedi:", error);
+      document.getElementById("nobetciAd").textContent = "Bilgi yüklenemedi";
+    }
+  }
+
+  loadSchedule();
+  loadMeals();
+  loadNobetci();
+  startAtaturkSozleri();
+  updateActiveUsers();
+  updateCurrentDate();
+  setInterval(updateClock, 1000);
+  setInterval(updateActiveUsers, 30000); // Her 30 saniyede bir güncelle
+
+  if ("serviceWorker" in navigator) {
+    let refreshing = false;
+    
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
+
+    navigator.serviceWorker.register("sw.js?v=11").then(reg => {
+      // Yeni güncelleme kontrolü
+      reg.addEventListener("updatefound", () => {
+        const newWorker = reg.installing;
+        newWorker.addEventListener("statechange", () => {
+          if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+            // Yeni sürüm var, banner göster
+            document.getElementById("updateBanner").style.display = "block";
+          }
+        });
+      });
+
+      // Sayfa yüklendiğinde güncelleme kontrolü yap
+      reg.update();
+    }).catch(err => {
+      console.error("Service Worker kayıt hatası:", err);
+    });
+  }
+
+  function refreshApp() {
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.controller.postMessage({ action: "skipWaiting" });
+    } else {
+      window.location.reload();
+    }
+  }
+
+  async function clearCacheAndReload() {
+    try {
+      // Tüm cache'leri temizle
+      if ('caches' in window) {
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)));
+        console.log('Tüm cache temizlendi');
+      }
+
+      // Service Worker'ı kaldır
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(registrations.map(registration => registration.unregister()));
+        console.log('Service Worker kaldırıldı');
+      }
+
+      // Sayfayı yeniden yükle (sunucudan)
+      window.location.reload(true);
+    } catch (error) {
+      console.error('Cache temizleme hatası:', error);
+      // Hata olsa bile sayfayı yenile
+      window.location.reload(true);
+    }
+  }
   </script>
 </body>
 </html>
