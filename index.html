@@ -880,6 +880,84 @@
   }
 
   async function showYemekImage(yemekAdi) {
+  const container = document.getElementById('yemekImageContainer');
+  const img = document.getElementById('yemekImage');
+  const loading = document.getElementById('imageLoading');
+  
+  container.classList.add('show');
+  img.style.display = 'none';
+  loading.style.display = 'block';
+  loading.textContent = '🍽️ Görsel yükleniyor...';
+
+  try {
+    // Yemek adını sadeleştir
+    let yemekTemiz = yemekAdi
+      .toLowerCase()
+      .replace(/\(.*?\)/g, '')
+      .replace(/ç/g, 'c')
+      .replace(/ğ/g, 'g')
+      .replace(/ı/g, 'i')
+      .replace(/ö/g, 'o')
+      .replace(/ş/g, 's')
+      .replace(/ü/g, 'u')
+      .trim();
+
+    // Türkçe → İngilizce çeviri eşleştirmeleri (görsel doğruluğunu artırır)
+    const translateMap = {
+      "çorba": "soup",
+      "pilav": "rice",
+      "köfte": "meatballs",
+      "makarna": "pasta",
+      "kebap": "kebab",
+      "tavuk": "chicken",
+      "et": "beef",
+      "balık": "fish",
+      "tatlı": "dessert",
+      "börek": "pastry",
+      "salata": "salad",
+      "fasulye": "beans",
+      "mercimek": "lentil",
+      "nohut": "chickpeas",
+      "patates": "potato",
+      "yumurta": "egg"
+    };
+
+    Object.keys(translateMap).forEach(tr => {
+      if (yemekTemiz.includes(tr)) {
+        yemekTemiz = yemekTemiz.replace(tr, translateMap[tr]);
+      }
+    });
+
+    const searchQuery = encodeURIComponent(yemekTemiz + ' traditional Turkish food');
+
+    // Pixabay API (daha doğru filtre)
+    const pixabayUrl = `https://pixabay.com/api/?key=45492961-7e430c5c5c4adf7e81b66ef7c&q=${searchQuery}&category=food&image_type=photo&orientation=horizontal&lang=en&per_page=5`;
+
+    const response = await fetch(pixabayUrl);
+    const data = await response.json();
+
+    if (data.hits && data.hits.length > 0) {
+      // En alakalı ilk yüksek kaliteli görseli seç
+      const selected = data.hits.find(h => h.webformatURL.includes('food')) || data.hits[0];
+      img.src = selected.largeImageURL || selected.webformatURL;
+
+      img.onload = () => {
+        loading.style.display = 'none';
+        img.style.display = 'block';
+      };
+    } else {
+      throw new Error('Görsel bulunamadı');
+    }
+
+    img.onerror = () => {
+      loading.textContent = '❌ Görsel yüklenemedi. Farklı bir yemek deneyin.';
+    };
+  } catch (error) {
+    console.error('Görsel yükleme hatası:', error);
+    loading.textContent = '❌ Görsel yüklenemedi';
+  }
+}
+
     const container = document.getElementById('yemekImageContainer');
     const img = document.getElementById('yemekImage');
     const loading = document.getElementById('imageLoading');
