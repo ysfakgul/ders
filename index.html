@@ -32,18 +32,28 @@
   }
 
   header img {
-    width: 140px;
-    height: 140px;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
     margin-top: 10px;
     box-shadow: 0 0 25px rgba(255,255,255,0.3);
     animation: floatLogo 4s ease-in-out infinite alternate;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+  }
+
+  header img:hover {
+    transform: scale(1.05);
+  }
+
+  header img:active {
+    transform: scale(0.95);
   }
 
   @media (max-width: 768px) {
     header img {
-      width: 100px;
-      height: 100px;
+      width: 120px;
+      height: 120px;
       margin-top: 8px;
     }
   }
@@ -69,8 +79,9 @@
   @media (max-width: 768px) {
     .container {
       padding: 20px 20px;
-      margin: 10px 10px;
-      width: calc(100% - 20px);
+      margin: 5px 0;
+      width: 100%;
+      border-radius: 0;
     }
   }
 
@@ -131,8 +142,9 @@
   @media (max-width: 768px) {
     .yemek-container {
       padding: 20px 20px;
-      margin: 10px 10px;
-      width: calc(100% - 20px);
+      margin: 5px 0;
+      width: 100%;
+      border-radius: 0;
     }
   }
 
@@ -323,7 +335,7 @@
 </head>
 <body>
   <header>
-    <img src="87348b3b-97a8-4fe6-a8e9-cca8434bad69.png" alt="MTAL Logo">
+    <img src="87348b3b-97a8-4fe6-a8e9-cca8434bad69.png" alt="MTAL Logo" onclick="clearCacheAndReload()">
   </header>
 
   <div class="container">
@@ -557,23 +569,64 @@
   setInterval(updateClock, 1000);
 
   if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("sw.js?v=5").then(reg => {
+    let refreshing = false;
+    
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (refreshing) return;
+      refreshing = true;
+      window.location.reload();
+    });
+
+    navigator.serviceWorker.register("sw.js?v=11").then(reg => {
+      // Yeni güncelleme kontrolü
       reg.addEventListener("updatefound", () => {
         const newWorker = reg.installing;
         newWorker.addEventListener("statechange", () => {
           if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
+            // Yeni sürüm var, banner göster
             document.getElementById("updateBanner").style.display = "block";
           }
         });
       });
+
+      // Sayfa yüklendiğinde güncelleme kontrolü yap
+      reg.update();
+    }).catch(err => {
+      console.error("Service Worker kayıt hatası:", err);
     });
   }
 
   function refreshApp() {
     if (navigator.serviceWorker.controller) {
       navigator.serviceWorker.controller.postMessage({ action: "skipWaiting" });
+    } else {
+      window.location.reload();
     }
-    window.location.reload();
+  }
+
+  async function clearCacheAndReload() {
+    try {
+      // Tüm cache'leri temizle
+      if ('caches' in window) {
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)));
+        console.log('Tüm cache temizlendi');
+      }
+
+      // Service Worker'ı kaldır
+      if ('serviceWorker' in navigator) {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        await Promise.all(registrations.map(registration => registration.unregister()));
+        console.log('Service Worker kaldırıldı');
+      }
+
+      // Sayfayı yeniden yükle (sunucudan)
+      window.location.reload(true);
+    } catch (error) {
+      console.error('Cache temizleme hatası:', error);
+      // Hata olsa bile sayfayı yenile
+      window.location.reload(true);
+    }
   }
   </script>
 </body>

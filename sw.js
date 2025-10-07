@@ -1,4 +1,4 @@
-const CACHE_NAME = "mtal-cache-v11"; // Her değişiklikte artır
+const CACHE_NAME = "mtal-cache-v12"; // Her değişiklikte artır
 const urlsToCache = [
   "./",
   "./index.html",
