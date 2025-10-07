@@ -159,12 +159,35 @@
     box-sizing: border-box;
   }
 
+  .current-date {
+    background: rgba(255,255,255,0.08);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--neon-color);
+    text-shadow: 0 0 10px rgba(255,221,64,0.3);
+    margin: 3px 0 5px 0;
+    width: 100%;
+    max-width: 800px;
+    box-sizing: border-box;
+    letter-spacing: 0.5px;
+  }
+
   @media (max-width: 768px) {
     .container {
       padding: 12px 15px;
       margin: 5px 8px;
       width: calc(100vw - 16px);
       border-radius: 12px;
+      max-width: calc(100vw - 16px);
+    }
+
+    .current-date {
+      font-size: 0.95em;
+      padding: 8px 15px;
+      margin: 3px 8px 5px 8px;
+      width: calc(100vw - 16px);
       max-width: calc(100vw - 16px);
     }
   }
@@ -454,6 +477,8 @@
     </div>
   </header>
 
+  <div class="current-date" id="currentDate"></div>
+
   <div class="container">
     <h2 id="status"></h2>
     <div class="countdown" id="countdown"></div>
@@ -569,6 +594,18 @@
     const randomVariation = Math.floor(Math.random() * 10) - 5; // -5 ile +5 arası değişim
     activeUsersCount = Math.max(1, baseUsers + randomVariation);
     document.getElementById('activeUsers').textContent = activeUsersCount;
+  }
+
+  // Bugünün tarihini göster
+  function updateCurrentDate() {
+    const gunler = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
+    const today = new Date();
+    const gun = today.getDate().toString().padStart(2, '0');
+    const ay = (today.getMonth() + 1).toString().padStart(2, '0');
+    const yil = today.getFullYear();
+    const gunAdi = gunler[today.getDay()];
+    
+    document.getElementById('currentDate').textContent = `📅 ${gun}.${ay}.${yil} ${gunAdi}`;
   }
 
   function startAtaturkSozleri() {
@@ -773,6 +810,7 @@
   loadNobetci();
   startAtaturkSozleri();
   updateActiveUsers();
+  updateCurrentDate();
   setInterval(updateClock, 1000);
   setInterval(updateActiveUsers, 30000); // Her 30 saniyede bir güncelle
 
