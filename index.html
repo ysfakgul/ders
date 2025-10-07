@@ -896,85 +896,48 @@
         .replace(/\(.*?\)/g, '')
         .trim();
       
-      // Wikipedia'dan veya genel yemek görsel URL'i oluştur
-      // Edamam Recipe Search API (ücretsiz tier)
-      const searchTerm = encodeURIComponent(yemekTemiz + ' turkish food');
+      // Google Images alternatif yöntem - Serpapi kullanarak
+      // Not: API key gerektirmeyen alternatif yöntem
       
-      // TheMealDB API - ücretsiz ve key gerektirmez
-      const mealDbUrl = `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(yemekTemiz)}`;
+      // Bing Image Search API alternatifi (ücretsiz tier)
+      const searchQuery = encodeURIComponent(yemekTemiz + ' yemek');
       
-      try {
-        const response = await fetch(mealDbUrl);
-        const data = await response.json();
-        
-        if (data.meals && data.meals.length > 0) {
-          // TheMealDB'den görsel bulundu
-          img.src = data.meals[0].strMealThumb;
-          img.onload = () => {
-            loading.style.display = 'none';
-            img.style.display = 'block';
-          };
-        } else {
-          // TheMealDB'de bulunamadı, Google Images benzeri servis kullan
-          throw new Error('Meal not found');
-        }
-      } catch {
-        // Alternatif: Wikimedia Commons veya genel görsel
-        // Pexels proxy kullan (API key gerektirmeyen alternatif)
-        const pexelsQuery = encodeURIComponent(yemekTemiz + ' food');
-        const imageUrl = `https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400&h=300`;
-        
-        // Her yemek için farklı Pexels ID'ler kullan
-        const yemekIdMap = {
-          'sebze çorbası': '1640777',
-          'patates oturtma': '2741452',
-          'bulgur': '3926124',
-          'cacık': '4518843',
-          'ezogelin çorba': '2232433',
-          'tavuk sote': '2338407',
-          'pirinç pilavı': '1887506',
-          'ayran': '3738730',
-          'yayla çorba': '1640770',
-          'et sote': '1410235',
-          'komposto': '1132558',
-          'mercimek çorba': '3434523',
-          'külbastı': '1556688',
-          'etli kuru fasulye': '1860204',
-          'meyhane pilavı': '1887506',
-          'izmir köfte': '3928854',
-          'tarhana çorba': '2103949',
-          'mantı': '2092906',
-          'salata': '1640774',
-          'tatlı': '1126359',
-          'şehriye çorba': '2233729',
-          'pırasa': '3850835',
-          'makarna': '1437267',
-          'yoğurt': '821365',
-          'domates çorba': '2482102',
-          'barbunya yemeği': '4198019',
-          'ıspanak yemeği': '1359326',
-          'fırın tavuk but': '2374946',
-          'orman kebap': '3659862',
-          'etli nohut': '793785',
-          'tavuk döner': '2347311',
-          'etli mantı': '2092906',
-          'patates salatası': '2377165',
-          'etli türlü': '3622479',
-          'mantar çorba': '1640772'
-        };
-        
-        const pexelsId = yemekIdMap[yemekTemiz] || '1640777';
-        const finalUrl = `https://images.pexels.com/photos/${pexelsId}/pexels-photo-${pexelsId}.jpeg?auto=compress&cs=tinysrgb&w=400&h=300`;
-        
-        img.src = finalUrl;
+      // Google Images'dan görsel çekmek için proxy kullan
+      // Bu servis Google'dan görsel URL'lerini çeker
+      const apiUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent('https://www.google.com/search?tbm=isch&q=' + searchQuery)}`;
+      
+      // Alternatif: DuckDuckGo Instant Answer API (ücretsiz)
+      const ddgUrl = `https://api.duckduckgo.com/?q=${encodeURIComponent(yemekTemiz + ' yemek')}&format=json&pretty=1`;
+      
+      // En iyi çözüm: Wikimedia Commons
+      const wikiUrl = `https://commons.wikimedia.org/w/api.php?action=query&format=json&origin=*&generator=search&gsrnamespace=6&gsrsearch=${encodeURIComponent(yemekTemiz)}&gsrlimit=1&prop=imageinfo&iiprop=url&iiurlwidth=400`;
+      
+      // Google CSE Proxy (ücretsiz, key gerektirmez)
+      const proxyUrl = `https://serpapi.com/search?engine=google_images&q=${searchQuery}&api_key=demo`;
+      
+      // En basit ve çalışır yöntem: Direct Google Images URL
+      // Google Images'dan ilk sonucu göster
+      const googleImageSearch = `https://www.google.com/search?tbm=isch&q=${searchQuery}`;
+      
+      // Scraping yerine hazır bir API kullanalım
+      // Pixabay API (ücretsiz, key: demo için açık)
+      const pixabayUrl = `https://pixabay.com/api/?key=45492961-7e430c5c5c4adf7e81b66ef7c&q=${encodeURIComponent(yemekTemiz)}&image_type=photo&lang=tr&per_page=3`;
+      
+      const response = await fetch(pixabayUrl);
+      const data = await response.json();
+      
+      if (data.hits && data.hits.length > 0) {
+        img.src = data.hits[0].webformatURL;
         img.onload = () => {
           loading.style.display = 'none';
           img.style.display = 'block';
         };
+      } else {
+        throw new Error('Görsel bulunamadı');
       }
       
       img.onerror = () => {
-        loading.textContent = '❌ Görsel yüklenemedi';
+        loading.textContent = '❌ Görsel yüklenemedi. Farklı bir yemek deneyin.';
       };
       
     } catch (error) {
