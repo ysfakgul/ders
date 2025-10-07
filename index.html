@@ -881,15 +881,15 @@
 
 async function showYemekImage(yemekAdi) {
   const container = document.getElementById('yemekImageContainer');
-  const img = document.getElementById('yemekImage');
   const loading = document.getElementById('imageLoading');
+  const resultDiv = document.getElementById('googleSearchResult');
 
   container.classList.add('show');
-  img.style.display = 'none';
+  resultDiv.innerHTML = '';
   loading.style.display = 'block';
   loading.textContent = '🍽️ Google Görseller aranıyor...';
 
-  // 🔠 Türkçe karakterleri normalize et
+  // Türkçe karakterleri normalize et
   function temizleMetin(text) {
     return text
       .toLowerCase()
@@ -906,36 +906,26 @@ async function showYemekImage(yemekAdi) {
   }
 
   const yemekTemiz = temizleMetin(yemekAdi);
+  const googleUrl = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(yemekTemiz + ' yemek')}`;
 
-  try {
-    // 🔍 Google Görseller - SerpAPI bağlantısı
-    const apiKey = "11c05fd01f6b4889a6b18c511afadbe5ad5c7f1c20c8277108bb51102bc476fd";
-    const query = encodeURIComponent(yemekTemiz + " yemek");
-    const apiUrl = `https://serpapi.com/search.json?engine=google_images&q=${query}&hl=tr&gl=tr&api_key=${apiKey}`;
+  // ❗ Google iframe engeli nedeniyle sayfayı doğrudan gömemiyoruz.
+  // Bunun yerine sonucu sayfada bağlantı + mini önizleme şeklinde göstereceğiz.
 
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-
-    if (data.images_results && data.images_results.length > 0) {
-      // 🎯 En uygun görseli seç
-      const result = data.images_results.find(x => x.thumbnail && x.thumbnail.includes("http")) || data.images_results[0];
-      img.src = result.thumbnail || result.original;
-
-      img.onload = () => {
-        loading.style.display = 'none';
-        img.style.display = 'block';
-      };
-    } else {
-      throw new Error("Görsel bulunamadı");
-    }
-  } catch (error) {
-    console.error("Google görsellerden çekme hatası:", error);
-    loading.textContent = "❌ Görsel bulunamadı. Farklı bir yemek deneyin.";
-  }
-
-  img.onerror = () => {
-    loading.textContent = "❌ Görsel yüklenemedi.";
-  };
+  loading.style.display = 'none';
+  resultDiv.innerHTML = `
+    <div style="background:#111827; padding:15px; border-radius:12px; color:white; text-align:center;">
+      <h3 style="margin-bottom:10px;">🍲 ${yemekAdi} için Google Görseller</h3>
+      <p style="font-size:15px; color:#a5b4fc;">
+        <a href="${googleUrl}" target="_blank" style="color:#60a5fa; text-decoration:none;">
+          👉 Google Görseller’de Ara (${yemekTemiz})
+        </a>
+      </p>
+      <iframe
+        srcdoc="<style>body{margin:0;background:#000;display:flex;align-items:center;justify-content:center;}</style><img src='https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_272x92dp.png' width='120'><p style='color:white;font-family:sans-serif;'>Google sonuçları için yukarıdaki bağlantıya tıklayın.</p>"
+        width="100%" height="300" style="border:none;border-radius:8px;">
+      </iframe>
+    </div>
+  `;
 }
 
   function closeYemekImage() {
