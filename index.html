@@ -55,11 +55,86 @@
     transform: scale(0.95);
   }
 
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    width: 100%;
+    max-width: 900px;
+    padding: 0 20px;
+    margin-top: 10px;
+  }
+
+  .ataturk-sozleri {
+    flex: 1;
+    min-height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255,255,255,0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    padding: 20px 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .soz-text {
+    font-size: 1.1em;
+    line-height: 1.6;
+    text-align: center;
+    font-style: italic;
+    color: #fff;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    position: absolute;
+    width: 90%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out, transform 1s ease-in-out;
+    transform: translateY(20px);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .soz-text.active {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .soz-imza {
+    font-size: 0.85em;
+    font-style: normal;
+    font-weight: 600;
+    color: var(--neon-color);
+    text-shadow: 0 0 8px rgba(255,221,64,0.4);
+    margin-top: 5px;
+    letter-spacing: 1px;
+  }
+
   @media (max-width: 768px) {
+    header {
+      flex-direction: column;
+      gap: 15px;
+      padding: 0 10px;
+    }
+
     header img {
       width: 120px;
       height: 120px;
       margin-top: 8px;
+    }
+
+    .ataturk-sozleri {
+      width: 100%;
+      min-height: 120px;
+      padding: 15px 20px;
+    }
+
+    .soz-text {
+      font-size: 0.95em;
+      line-height: 1.5;
     }
   }
 
@@ -84,10 +159,10 @@
   @media (max-width: 768px) {
     .container {
       padding: 20px 15px;
-      margin: 5px 0;
-      width: 100vw;
-      border-radius: 0;
-      max-width: 100vw;
+      margin: 8px;
+      width: calc(100vw - 16px);
+      border-radius: 12px;
+      max-width: calc(100vw - 16px);
     }
   }
 
@@ -148,10 +223,10 @@
   @media (max-width: 768px) {
     .yemek-container {
       padding: 20px 15px;
-      margin: 5px 0;
-      width: 100vw;
-      border-radius: 0;
-      max-width: 100vw;
+      margin: 8px;
+      width: calc(100vw - 16px);
+      border-radius: 12px;
+      max-width: calc(100vw - 16px);
     }
   }
 
@@ -343,6 +418,9 @@
 <body>
   <header>
     <img src="87348b3b-97a8-4fe6-a8e9-cca8434bad69.png" alt="MTAL Logo" onclick="clearCacheAndReload()">
+    <div class="ataturk-sozleri">
+      <div class="soz-text active" id="currentSoz"></div>
+    </div>
   </header>
 
   <div class="container">
@@ -372,6 +450,42 @@
   <script>
   let schedule = [];
   let yemekData = [];
+  
+  const ataturkSozleri = [
+    "Hayatta en hakiki mürşit ilimdir, fendir.",
+    "Bir milleti hür, müstakil, şanlı, yüksek bir toplum halinde yaşatmanın yegane vasıtası kültürdür.",
+    "Ey Türk gençliği! Birinci vazifen, Türk istiklalini, Türk Cumhuriyetini, ilelebet muhafaza ve müdafaa etmektir.",
+    "Eğitimde feda edilecek hiçbir şey yoktur.",
+    "Öğretmenler yeni neslin vücuda gelmesinde en birinci amil, en birinci mürebbidirler.",
+    "Ülkenin kurtuluşu ancak eğitimle mümkündür.",
+    "Türk milleti çalışkandır, zekidir, eğitim ve öğrenimle her türlü medeniyete layıktır.",
+    "Maarif davamız, asker, milletçe, her şeyimizle üstünde duracağımız meselelerdendir.",
+    "İlim ve teknikte ilerleme bütün olarak başarımızın en önemli kaynaklarındandır.",
+    "Kültürlü bir millet demek, aynı zamanda münevver bir millet demektir."
+  ];
+
+  let currentSozIndex = 0;
+
+  function startAtaturkSozleri() {
+    const sozElement = document.getElementById('currentSoz');
+    sozElement.innerHTML = `
+      <div>"${ataturkSozleri[currentSozIndex]}"</div>
+      <div class="soz-imza">Gazi Mustafa Kemal ATATÜRK</div>
+    `;
+
+    setInterval(() => {
+      sozElement.classList.remove('active');
+      
+      setTimeout(() => {
+        currentSozIndex = (currentSozIndex + 1) % ataturkSozleri.length;
+        sozElement.innerHTML = `
+          <div>"${ataturkSozleri[currentSozIndex]}"</div>
+          <div class="soz-imza">Gazi Mustafa Kemal ATATÜRK</div>
+        `;
+        sozElement.classList.add('active');
+      }, 1000);
+    }, 7000);
+  }
 
   async function loadSchedule() {
     try {
@@ -552,6 +666,7 @@
   loadSchedule();
   loadMeals();
   loadNobetci();
+  startAtaturkSozleri();
   setInterval(updateClock, 1000);
 
   if ("serviceWorker" in navigator) {
