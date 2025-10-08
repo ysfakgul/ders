@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-orientation" content="portrait">
 <meta name="theme-color" content="#1e3a8a">
 <title>Mimar İzzet Baysal MTAL</title>
@@ -559,7 +559,10 @@
     </div>
   </header>
 
-  <div class="current-date" id="currentDate"></div>
+  <div style="display: flex; align-items: center; justify-content: center; gap: 12px; max-width: 800px; width: 100%;">
+    <div class="current-date" id="currentDate"></div>
+    <div id="boluWeather" style="background: rgba(255,255,255,0.08); padding: 10px 20px; border-radius: 8px; font-size: 1.1em; font-weight: 600; color: #40cfff; text-shadow: 0 0 10px rgba(64,207,255,0.3); min-width: 120px; display: flex; align-items: center; gap: 8px;"></div>
+  </div>
 
   <div class="container">
     <h2 id="status"></h2>
@@ -1010,8 +1013,10 @@ function kapatYemekImage() {
   startAtaturkSozleri();
   updateActiveUsers();
   updateCurrentDate();
+  updateBoluWeather();
   setInterval(updateClock, 1000);
   setInterval(updateActiveUsers, 30000); // Her 30 saniyede bir güncelle
+  setInterval(updateBoluWeather, 1800000); // Hava durumu her 30 dakikada bir güncellensin
 
   if ("serviceWorker" in navigator) {
     let refreshing = false;
@@ -1050,6 +1055,40 @@ function kapatYemekImage() {
   }
 
   async function clearCacheAndReload() {
+// Bolu hava durumu fonksiyonu (global scope)
+async function updateBoluWeather() {
+  const weatherDiv = document.getElementById('boluWeather');
+  if (!weatherDiv) return;
+  weatherDiv.innerHTML = '<span>🌤️ Bolu: ...</span>';
+  try {
+    // Open-Meteo API: Bolu koordinatları (lat: 40.739, lon: 31.611)
+    const url = 'https://api.open-meteo.com/v1/forecast?latitude=40.739&longitude=31.611&current_weather=true&hourly=temperature_2m,weathercode';
+    const response = await fetch(url);
+    const data = await response.json();
+    if (data && data.current_weather) {
+      const temp = Math.round(data.current_weather.temperature);
+      const code = data.current_weather.weathercode;
+      const icon = boluWeatherIcon(code);
+      weatherDiv.innerHTML = `<span>${icon} Bolu: ${temp}°C</span>`;
+    } else {
+      weatherDiv.innerHTML = '<span>🌤️ Bolu: Bilgi yok</span>';
+    }
+  } catch (err) {
+    weatherDiv.innerHTML = '<span>🌤️ Bolu: Bilgi yok</span>';
+  }
+}
+
+// Open-Meteo weathercode -> emoji (global scope)
+function boluWeatherIcon(code) {
+  // https://open-meteo.com/en/docs#api_form
+  if ([0].includes(code)) return '☀️'; // Clear
+  if ([1,2,3].includes(code)) return '⛅'; // Mainly clear, partly cloudy
+  if ([45,48].includes(code)) return '🌫️'; // Fog
+  if ([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return '🌦️'; // Drizzle/Rain
+  if ([71,73,75,77,85,86].includes(code)) return '🌨️'; // Snow
+  if ([95,96,99].includes(code)) return '⛈️'; // Thunderstorm
+  return '🌤️';
+}
     try {
       // Tüm cache'leri temizle
       if ('caches' in window) {
