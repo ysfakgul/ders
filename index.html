@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-orientation" content="portrait">
 <meta name="theme-color" content="#1e3a8a">
 <title>Mimar İzzet Baysal MTAL</title>
@@ -146,6 +146,67 @@
     to { transform: translateY(-10px); }
   }
 
+  .date-weather-container {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+    max-width: 800px;
+    margin: 3px 0 5px 0;
+  }
+
+  .current-date {
+    background: rgba(255,255,255,0.08);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--neon-color);
+    text-shadow: 0 0 10px rgba(255,221,64,0.3);
+    box-sizing: border-box;
+    letter-spacing: 0.5px;
+    flex: 1;
+  }
+
+  .weather-info {
+    background: rgba(255,255,255,0.08);
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 1.1em;
+    font-weight: 600;
+    color: var(--neon-color);
+    text-shadow: 0 0 10px rgba(255,221,64,0.3);
+    box-sizing: border-box;
+    letter-spacing: 0.5px;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .weather-info .temp {
+    font-size: 1.2em;
+  }
+
+  @media (max-width: 768px) {
+    .date-weather-container {
+      flex-direction: column;
+      gap: 5px;
+      margin: 3px 8px 5px 8px;
+      width: calc(100vw - 16px);
+    }
+
+    .current-date, .weather-info {
+      font-size: 0.95em;
+      padding: 8px 15px;
+      width: 100%;
+    }
+
+    .weather-info .temp {
+      font-size: 1.1em;
+    }
+  }
+
   .container {
     background: rgba(255,255,255,0.12);
     padding: 15px 25px;
@@ -187,35 +248,12 @@
     50% { transform: translateY(-10px); }
   }
 
-  .current-date {
-    background: rgba(255,255,255,0.08);
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-size: 1.1em;
-    font-weight: 600;
-    color: var(--neon-color);
-    text-shadow: 0 0 10px rgba(255,221,64,0.3);
-    margin: 3px 0 5px 0;
-    width: 100%;
-    max-width: 800px;
-    box-sizing: border-box;
-    letter-spacing: 0.5px;
-  }
-
   @media (max-width: 768px) {
     .container {
       padding: 12px 15px;
       margin: 5px 8px;
       width: calc(100vw - 16px);
       border-radius: 12px;
-      max-width: calc(100vw - 16px);
-    }
-
-    .current-date {
-      font-size: 0.95em;
-      padding: 8px 15px;
-      margin: 3px 8px 5px 8px;
-      width: calc(100vw - 16px);
       max-width: calc(100vw - 16px);
     }
   }
@@ -341,17 +379,18 @@
     }
   }
 
-  .yemek-image-container {
-    margin-top: 15px;
-    padding: 15px;
-    background: rgba(255,255,255,0.05);
-    border-radius: 12px;
+  #yemekImageContainer {
     display: none;
-  }
-
-  .yemek-image-container.show {
-    display: block;
-    animation: fadeIn 0.5s ease;
+    position: relative;
+    background: #0f172a;
+    border: 1px solid #1e3a8a;
+    border-radius: 12px;
+    color: white;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+    text-align: center;
+    animation: fadeIn 0.3s ease;
   }
 
   @keyframes fadeIn {
@@ -359,35 +398,36 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  .yemek-image-container img {
-    max-width: 100%;
-    height: auto;
-    max-height: 300px;
-    border-radius: 10px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-    object-fit: cover;
-  }
-
-  .yemek-image-container .loading {
-    font-size: 1.2em;
-    color: var(--neon-color);
-  }
-
-  .yemek-image-container .close-btn {
-    background: rgba(255,255,255,0.2);
+  #closeYemekBtn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: transparent;
     border: none;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 5px;
     cursor: pointer;
-    margin-top: 10px;
-    font-size: 0.9em;
-    transition: all 0.3s ease;
+    font-size: 20px;
+    color: #f87171;
+    transition: 0.2s;
   }
 
-  .yemek-image-container .close-btn:hover {
-    background: rgba(255,255,255,0.3);
-    transform: scale(1.05);
+  #closeYemekBtn:hover {
+    color: #ef4444;
+    transform: scale(1.2);
+  }
+
+  #googleSearchResult a {
+    display: inline-block;
+    background: #1e3a8a;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.2s;
+  }
+
+  #googleSearchResult a:hover {
+    background: #2563eb;
   }
 
   #nobetci {
@@ -547,8 +587,6 @@
       padding: 5px 10px;
     }
   }
-
-
 </style>
 </head>
 <body>
@@ -559,9 +597,12 @@
     </div>
   </header>
 
-  <div style="display: flex; align-items: center; justify-content: center; gap: 12px; max-width: 800px; width: 100%;">
+  <div class="date-weather-container">
     <div class="current-date" id="currentDate"></div>
-    <div id="boluWeather" style="background: rgba(255,255,255,0.08); padding: 10px 20px; border-radius: 8px; font-size: 1.1em; font-weight: 600; color: #40cfff; text-shadow: 0 0 10px rgba(64,207,255,0.3); min-width: 120px; display: flex; align-items: center; gap: 8px;"></div>
+    <div class="weather-info" id="weatherInfo">
+      <span>🌤️</span>
+      <span class="temp">Yükleniyor...</span>
+    </div>
   </div>
 
   <div class="container">
@@ -574,65 +615,11 @@
   <div class="yemek-container">
     <h3>Bugünün Öğle Yemeği</h3>
     <ul class="yemek-listesi" id="yemekListesi"></ul>
-   <style>
-  #yemekImageContainer {
-    display: none;
-    position: relative;
-    background: #0f172a;
-    border: 1px solid #1e3a8a;
-    border-radius: 12px;
-    color: white;
-    padding: 20px;
-    margin-top: 20px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
-    text-align: center;
-    animation: fadeIn 0.3s ease;
-  }
-
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  #closeYemekBtn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: transparent;
-    border: none;
-    cursor: pointer;
-    font-size: 20px;
-    color: #f87171;
-    transition: 0.2s;
-  }
-
-  #closeYemekBtn:hover {
-    color: #ef4444;
-    transform: scale(1.2);
-  }
-
-  #googleSearchResult a {
-    display: inline-block;
-    background: #1e3a8a;
-    color: #fff;
-    padding: 10px 16px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 500;
-    transition: background 0.2s;
-  }
-
-  #googleSearchResult a:hover {
-    background: #2563eb;
-  }
-</style>
-
-<div id="yemekImageContainer">
-  <button id="closeYemekBtn" onclick="kapatYemekImage()">✖</button>
-  <div id="imageLoading">Bir yemek seçin...</div>
-  <div id="googleSearchResult"></div>
-</div>
-
+    <div id="yemekImageContainer">
+      <button id="closeYemekBtn" onclick="kapatYemekImage()">✖</button>
+      <div id="imageLoading">Bir yemek seçin...</div>
+      <div id="googleSearchResult"></div>
+    </div>
 
     <div id="nobetci">
       <h4>👨‍🏫 Nöbetçi Müdür Yardımcısı</h4>
@@ -675,12 +662,10 @@
   let sessionId = Math.random().toString(36).substring(7);
   let activeUsersCount = 0;
 
-  // Pull-to-refresh için değişkenler
   let startY = 0;
   let currentY = 0;
   let isPulling = false;
 
-  // Pull-to-refresh fonksiyonları
   function handleTouchStart(e) {
     if (window.scrollY === 0) {
       startY = e.touches[0].pageY;
@@ -697,7 +682,6 @@
     if (pullDistance > 0 && window.scrollY === 0) {
       e.preventDefault();
       
-      // Görsel feedback için body'yi hafif aşağı kaydır
       if (pullDistance < 100) {
         document.body.style.transform = `translateY(${pullDistance / 2}px)`;
         document.body.style.transition = 'none';
@@ -714,7 +698,6 @@
     document.body.style.transition = 'transform 0.3s ease';
     
     if (pullDistance > 80) {
-      // Yenileme animasyonu
       document.body.style.opacity = '0.5';
       setTimeout(() => {
         window.location.reload();
@@ -726,22 +709,17 @@
     currentY = 0;
   }
 
-  // Touch event listeners
   document.addEventListener('touchstart', handleTouchStart, { passive: false });
   document.addEventListener('touchmove', handleTouchMove, { passive: false });
   document.addEventListener('touchend', handleTouchEnd);
 
-  // Aktif kullanıcı sayısını simüle et (gerçek API yerine)
   function updateActiveUsers() {
-    // Gerçek bir backend olmadığı için rastgele bir sayı gösterelim
-    // Gerçek uygulamada burası bir API'den veri çekecek
-    const baseUsers = 15; // Temel kullanıcı sayısı
-    const randomVariation = Math.floor(Math.random() * 10) - 5; // -5 ile +5 arası değişim
+    const baseUsers = 15;
+    const randomVariation = Math.floor(Math.random() * 10) - 5;
     activeUsersCount = Math.max(1, baseUsers + randomVariation);
     document.getElementById('activeUsers').textContent = activeUsersCount;
   }
 
-  // Bugünün tarihini göster
   function updateCurrentDate() {
     const gunler = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
     const today = new Date();
@@ -751,6 +729,39 @@
     const gunAdi = gunler[today.getDay()];
     
     document.getElementById('currentDate').textContent = `📅 ${gun}.${ay}.${yil} ${gunAdi}`;
+  }
+
+  async function updateWeather() {
+    try {
+      const response = await fetch('https://api.open-meteo.com/v1/forecast?latitude=40.7358&longitude=31.6061&current=temperature_2m,weather_code&timezone=Europe%2FIstanbul');
+      const data = await response.json();
+      
+      const temp = Math.round(data.current.temperature_2m);
+      const weatherCode = data.current.weather_code;
+      
+      const weatherIcons = {
+        0: '☀️', 1: '🌤️', 2: '⛅', 3: '☁️',
+        45: '🌫️', 48: '🌫️',
+        51: '🌦️', 53: '🌦️', 55: '🌦️',
+        61: '🌧️', 63: '🌧️', 65: '🌧️',
+        71: '🌨️', 73: '🌨️', 75: '🌨️',
+        80: '🌧️', 81: '🌧️', 82: '🌧️',
+        95: '⛈️', 96: '⛈️', 99: '⛈️'
+      };
+      
+      const icon = weatherIcons[weatherCode] || '🌤️';
+      
+      document.getElementById('weatherInfo').innerHTML = `
+        <span>${icon}</span>
+        <span class="temp">Bolu ${temp}°C</span>
+      `;
+    } catch (error) {
+      console.error('Hava durumu yüklenemedi:', error);
+      document.getElementById('weatherInfo').innerHTML = `
+        <span>🌤️</span>
+        <span class="temp">Bolu</span>
+      `;
+    }
   }
 
   function startAtaturkSozleri() {
@@ -782,7 +793,6 @@
       updateClock();
     } catch (error) {
       console.error("Ders programı yüklenemedi:", error);
-      // Test için örnek veri
       schedule = [
         {type: "1. Ders", label: "Ders", start: "08:45", end: "09:25"},
         {type: "1. Teneffüs", label: "Teneffüs", start: "09:25", end: "09:40"},
@@ -812,7 +822,6 @@
     
     document.getElementById('currentTime').textContent = `🕒 Şu an: ${now.toLocaleTimeString('tr-TR')}`;
 
-    // Hafta sonu kontrolü
     if (gun === 0 || gun === 6) {
       okulKapali.style.display = "flex";
       status.textContent = "";
@@ -826,7 +835,6 @@
     let currentIndex = -1;
     let foundCurrent = false;
 
-    // Şu anki ders veya etkinliği bul
     for (let i = 0; i < schedule.length; i++) {
       const start = parseTime(schedule[i].start);
       const end = parseTime(schedule[i].end);
@@ -839,12 +847,10 @@
     }
 
     if (foundCurrent && currentIndex >= 0) {
-      // Ders veya etkinlik devam ediyor
       const ders = schedule[currentIndex];
       const end = parseTime(ders.end);
       const kalan = Math.floor((end - now) / 1000);
       
-      // Teneffüs kontrolü
       if (ders.label === "Teneffüs" || ders.type.includes("Teneffüs") || ders.type.includes("Öğle Arası")) {
         container.classList.add('teneffus');
       } else {
@@ -865,7 +871,6 @@
       }
     } else {
       container.classList.remove('teneffus');
-      // Ders arası veya okul öncesi/sonrası
       let nextDers = null;
       for (let i = 0; i < schedule.length; i++) {
         const start = parseTime(schedule[i].start);
@@ -885,7 +890,6 @@
           next.textContent = `${nextDers.start} - ${nextDers.end}`;
         }
       } else {
-        // Okul günü bitti
         okulKapali.style.display = "flex";
         status.textContent = "";
         countdown.textContent = "";
@@ -936,50 +940,44 @@
     }
   }
 
-function showYemekImage(yemekAdi) {
-  const container = document.getElementById('yemekImageContainer');
-  const loading = document.getElementById('imageLoading');
-  const resultDiv = document.getElementById('googleSearchResult');
+  function showYemekImage(yemekAdi) {
+    const container = document.getElementById('yemekImageContainer');
+    const loading = document.getElementById('imageLoading');
+    const resultDiv = document.getElementById('googleSearchResult');
 
-  container.style.display = 'block';
-  resultDiv.innerHTML = '';
-  loading.style.display = 'block';
-  loading.textContent = '🍽️ Google Görseller aranıyor...';
+    container.style.display = 'block';
+    resultDiv.innerHTML = '';
+    loading.style.display = 'block';
+    loading.textContent = '🍽️ Google Görseller aranıyor...';
 
-  // Türkçe karakterleri temizle
-  function temizleMetin(text) {
-    return text
-      .toLowerCase()
-      .replace(/\(.*?\)/g, '')
-      .trim()
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .replace(/ı/g, 'i')
-      .replace(/ş/g, 's')
-      .replace(/ç/g, 'c')
-      .replace(/ö/g, 'o')
-      .replace(/ü/g, 'u')
-      .replace(/ğ/g, 'g');
+    function temizleMetin(text) {
+      return text
+        .toLowerCase()
+        .replace(/\(.*?\)/g, '')
+        .trim()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/ı/g, 'i')
+        .replace(/ş/g, 's')
+        .replace(/ç/g, 'c')
+        .replace(/ö/g, 'o')
+        .replace(/ü/g, 'u')
+        .replace(/ğ/g, 'g');
+    }
+
+    const yemekTemiz = temizleMetin(yemekAdi);
+    const googleUrl = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(yemekTemiz + ' yemek')}`;
+
+    loading.style.display = 'none';
+    resultDiv.innerHTML = `
+      <h3 style="margin-bottom:12px;">🍲 ${yemekAdi} için Google Görseller</h3>
+      <a href="${googleUrl}" target="_blank">🔍 Google Görseller'de Aç</a>
+    `;
   }
 
-  const yemekTemiz = temizleMetin(yemekAdi);
-  const googleUrl = `https://www.google.com/search?tbm=isch&q=${encodeURIComponent(yemekTemiz + ' yemek')}`;
-
-  loading.style.display = 'none';
-  resultDiv.innerHTML = `
-    <h3 style="margin-bottom:12px;">🍲 ${yemekAdi} için Google Görseller</h3>
-    <a href="${googleUrl}" target="_blank">🔍 Google Görseller’de Aç</a>
-  `;
-}
-
-function kapatYemekImage() {
-  const container = document.getElementById('yemekImageContainer');
-  container.style.display = 'none';
-}
-
-  function closeYemekImage() {
+  function kapatYemekImage() {
     const container = document.getElementById('yemekImageContainer');
-    container.classList.remove('show');
+    container.style.display = 'none';
   }
 
   async function loadNobetci() {
@@ -1013,10 +1011,10 @@ function kapatYemekImage() {
   startAtaturkSozleri();
   updateActiveUsers();
   updateCurrentDate();
-  updateBoluWeather();
+  updateWeather();
   setInterval(updateClock, 1000);
-  setInterval(updateActiveUsers, 30000); // Her 30 saniyede bir güncelle
-  setInterval(updateBoluWeather, 1800000); // Hava durumu her 30 dakikada bir güncellensin
+  setInterval(updateActiveUsers, 30000);
+  setInterval(updateWeather, 600000); // Her 10 dakikada bir hava durumunu güncelle
 
   if ("serviceWorker" in navigator) {
     let refreshing = false;
@@ -1028,18 +1026,15 @@ function kapatYemekImage() {
     });
 
     navigator.serviceWorker.register("sw.js?v=11").then(reg => {
-      // Yeni güncelleme kontrolü
       reg.addEventListener("updatefound", () => {
         const newWorker = reg.installing;
         newWorker.addEventListener("statechange", () => {
           if (newWorker.state === "installed" && navigator.serviceWorker.controller) {
-            // Yeni sürüm var, banner göster
             document.getElementById("updateBanner").style.display = "block";
           }
         });
       });
 
-      // Sayfa yüklendiğinde güncelleme kontrolü yap
       reg.update();
     }).catch(err => {
       console.error("Service Worker kayıt hatası:", err);
@@ -1055,60 +1050,22 @@ function kapatYemekImage() {
   }
 
   async function clearCacheAndReload() {
-// Bolu hava durumu fonksiyonu (global scope)
-async function updateBoluWeather() {
-  const weatherDiv = document.getElementById('boluWeather');
-  if (!weatherDiv) return;
-  weatherDiv.innerHTML = '<span>🌤️ Bolu: ...</span>';
-  try {
-    // Open-Meteo API: Bolu koordinatları (lat: 40.739, lon: 31.611)
-    const url = 'https://api.open-meteo.com/v1/forecast?latitude=40.739&longitude=31.611&current_weather=true&hourly=temperature_2m,weathercode';
-    const response = await fetch(url);
-    const data = await response.json();
-    if (data && data.current_weather) {
-      const temp = Math.round(data.current_weather.temperature);
-      const code = data.current_weather.weathercode;
-      const icon = boluWeatherIcon(code);
-      weatherDiv.innerHTML = `<span>${icon} Bolu: ${temp}°C</span>`;
-    } else {
-      weatherDiv.innerHTML = '<span>🌤️ Bolu: Bilgi yok</span>';
-    }
-  } catch (err) {
-    weatherDiv.innerHTML = '<span>🌤️ Bolu: Bilgi yok</span>';
-  }
-}
-
-// Open-Meteo weathercode -> emoji (global scope)
-function boluWeatherIcon(code) {
-  // https://open-meteo.com/en/docs#api_form
-  if ([0].includes(code)) return '☀️'; // Clear
-  if ([1,2,3].includes(code)) return '⛅'; // Mainly clear, partly cloudy
-  if ([45,48].includes(code)) return '🌫️'; // Fog
-  if ([51,53,55,56,57,61,63,65,66,67,80,81,82].includes(code)) return '🌦️'; // Drizzle/Rain
-  if ([71,73,75,77,85,86].includes(code)) return '🌨️'; // Snow
-  if ([95,96,99].includes(code)) return '⛈️'; // Thunderstorm
-  return '🌤️';
-}
     try {
-      // Tüm cache'leri temizle
       if ('caches' in window) {
         const cacheNames = await caches.keys();
         await Promise.all(cacheNames.map(cacheName => caches.delete(cacheName)));
         console.log('Tüm cache temizlendi');
       }
 
-      // Service Worker'ı kaldır
       if ('serviceWorker' in navigator) {
         const registrations = await navigator.serviceWorker.getRegistrations();
         await Promise.all(registrations.map(registration => registration.unregister()));
         console.log('Service Worker kaldırıldı');
       }
 
-      // Sayfayı yeniden yükle (sunucudan)
       window.location.reload(true);
     } catch (error) {
       console.error('Cache temizleme hatası:', error);
-      // Hata olsa bile sayfayı yenile
       window.location.reload(true);
     }
   }
