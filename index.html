@@ -152,6 +152,8 @@
     width: 100%;
     max-width: 800px;
     margin: 3px 0 5px 0;
+    flex-direction: row;
+    align-items: stretch;
   }
 
   .current-date {
@@ -180,7 +182,7 @@
     flex: 1;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 8px;
   }
 
@@ -190,20 +192,21 @@
 
   @media (max-width: 768px) {
     .date-weather-container {
-      flex-direction: column;
+      flex-direction: row;
       gap: 5px;
       margin: 3px 8px 5px 8px;
       width: calc(100vw - 16px);
     }
 
     .current-date, .weather-info {
-      font-size: 0.95em;
-      padding: 8px 15px;
-      width: 100%;
+      font-size: 0.85em;
+      padding: 8px 10px;
+      width: auto;
+      flex: 1;
     }
 
     .weather-info .temp {
-      font-size: 1.1em;
+      font-size: 1em;
     }
   }
 
