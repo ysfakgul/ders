@@ -776,11 +776,36 @@
         95: '⛈️', 96: '⛈️', 99: '⛈️'
       };
       
+      const weatherDescriptions = {
+        0: 'Güneşli',
+        1: 'Az Bulutlu',
+        2: 'Parçalı Bulutlu',
+        3: 'Bulutlu',
+        45: 'Sisli',
+        48: 'Sisli',
+        51: 'Hafif Yağmurlu',
+        53: 'Yağmurlu',
+        55: 'Şiddetli Yağmurlu',
+        61: 'Hafif Yağmurlu',
+        63: 'Yağmurlu',
+        65: 'Şiddetli Yağmurlu',
+        71: 'Hafif Karlı',
+        73: 'Karlı',
+        75: 'Yoğun Karlı',
+        80: 'Sağanak Yağışlı',
+        81: 'Sağanak Yağışlı',
+        82: 'Şiddetli Sağanak',
+        95: 'Gök Gürültülü',
+        96: 'Fırtınalı',
+        99: 'Şiddetli Fırtına'
+      };
+      
       const icon = weatherIcons[weatherCode] || '🌤️';
+      const description = weatherDescriptions[weatherCode] || 'Az Bulutlu';
       
       document.getElementById('weatherInfo').innerHTML = `
         <span>${icon}</span>
-        <span class="temp">Bolu ${temp}°C</span>
+        <span class="temp">Bolu ${temp}°C ${description}</span>
       `;
     } catch (error) {
       console.error('Hava durumu yüklenemedi:', error);
@@ -858,7 +883,40 @@
       return;
     }
 
+    // İlk dersin başlangıç saatini kontrol et (2 saat önce gösterim için)
+    if (schedule.length > 0) {
+      const ilkDers = schedule[0];
+      const ilkDersBaslangic = parseTime(ilkDers.start);
+      const ikiSaatOnce = new Date(ilkDersBaslangic);
+      ikiSaatOnce.setHours(ikiSaatOnce.getHours() - 2);
+      
+      // Eğer şu an ilk dersten 2 saatten daha önceyse - OKUL KAPALI
+      if (now < ikiSaatOnce) {
+        okulKapali.style.display = "flex";
+        status.textContent = "";
+        countdown.textContent = "";
+        next.textContent = "";
+        container.classList.remove('teneffus');
+        return;
+      }
+      
+      // Eğer şu an ilk dersten 2 saat önce ile ilk ders başlangıcı arasındaysa
+      if (now >= ikiSaatOnce && now < ilkDersBaslangic) {
+        okulKapali.style.display = "none";
+        const kalan = Math.floor((ilkDersBaslangic - now) / 1000);
+        const dakika = Math.floor(kalan / 60);
+        const saniye = kalan % 60;
+        
+        container.classList.remove('teneffus');
+        status.textContent = "🌅 Okul Henüz Başlamadı";
+        countdown.textContent = `⏰ 1. Dersin başlamasına ${dakika} dk ${saniye} sn kaldı`;
+        next.textContent = `İlk Ders: ${ilkDers.type} (${ilkDers.start} - ${ilkDers.end})`;
+        return;
+      }
+    }
+
     okulKapali.style.display = "none";
+
     let currentIndex = -1;
     let foundCurrent = false;
 
@@ -1041,7 +1099,7 @@
   updateWeather();
   setInterval(updateClock, 1000);
   setInterval(updateActiveUsers, 30000);
-  setInterval(updateWeather, 600000); // Her 10 dakikada bir hava durumunu güncelle
+  setInterval(updateWeather, 600000);
 
   if ("serviceWorker" in navigator) {
     let refreshing = false;
