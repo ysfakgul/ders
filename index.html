@@ -668,26 +668,158 @@
     </div>
   </footer>
 
+  <script type="module">
+  // Firebase imports
+  import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
+  import { getDatabase, ref, set, onValue, onDisconnect, serverTimestamp, remove } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
+
+  // Firebase konfigürasyonu - KENDİ FIREBASE PROJENİZİN BİLGİLERİYLE DEĞİŞTİRİN
+  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyA7N0XuUcRi_gpgtRWa3UL7CEXXnnsRUcI",
+  authDomain: "mtal-school-app.firebaseapp.com",
+  databaseURL: "https://mtal-school-app-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "mtal-school-app",
+  storageBucket: "mtal-school-app.firebasestorage.app",
+  messagingSenderId: "948127446637",
+  appId: "1:948127446637:web:a7531c50613d3356e7b164",
+  measurementId: "G-FHBC6SMR60"
+};
+
+  // Firebase başlat
+  let app, database, userRef;
+  let firebaseEnabled = false;
+
+  try {
+    // Eğer tüm config değerleri doluysa Firebase'i başlat
+    if (!firebaseConfig.apiKey.includes('BURAYA')) {
+      app = initializeApp(firebaseConfig);
+      database = getDatabase(app);
+      firebaseEnabled = true;
+      console.log('Firebase başlatıldı');
+    } else {
+      console.log('Firebase yapılandırılmamış, simüle mod çalışıyor');
+    }
+  } catch (error) {
+    console.error('Firebase başlatma hatası:', error);
+    firebaseEnabled = false;
+  }
+
+  // Benzersiz kullanıcı ID'si oluştur
+  const userId = Math.random().toString(36).substring(2) + Date.now().toString(36);
+
+  // Firebase ile gerçek kullanıcı takibi
+  function initializeRealUserTracking() {
+    if (!firebaseEnabled) return;
+
+    try {
+      // Kullanıcıyı veritabanına ekle
+      userRef = ref(database, `activeUsers/${userId}`);
+      
+      // Kullanıcı bilgilerini kaydet
+      set(userRef, {
+        id: userId,
+        lastSeen: serverTimestamp(),
+        online: true
+      });
+
+      // Kullanıcı sayfayı kapatırsa otomatik sil
+      onDisconnect(userRef).remove();
+
+      // Her 30 saniyede bir "heartbeat" gönder
+      setInterval(() => {
+        set(userRef, {
+          id: userId,
+          lastSeen: serverTimestamp(),
+          online: true
+        });
+      }, 30000);
+
+      // Aktif kullanıcıları dinle ve sayıyı güncelle
+      const activeUsersRef = ref(database, 'activeUsers');
+      onValue(activeUsersRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data) {
+          // Son 60 saniye içinde aktif olan kullanıcıları say
+          const now = Date.now();
+          const activeCount = Object.values(data).filter(user => {
+            // Eğer lastSeen timestamp ise
+            if (user.lastSeen && typeof user.lastSeen === 'number') {
+              return (now - user.lastSeen) < 60000; // 60 saniye
+            }
+            return user.online === true;
+          }).length;
+          
+          document.getElementById('activeUsers').textContent = activeCount;
+        } else {
+          document.getElementById('activeUsers').textContent = '1';
+        }
+      });
+
+      // Eski kayıtları temizle (60 saniyeden eski)
+      setInterval(() => {
+        onValue(activeUsersRef, (snapshot) => {
+          const data = snapshot.val();
+          if (data) {
+            const now = Date.now();
+            Object.keys(data).forEach(key => {
+              const user = data[key];
+              if (user.lastSeen && typeof user.lastSeen === 'number') {
+                if ((now - user.lastSeen) > 60000) {
+                  remove(ref(database, `activeUsers/${key}`));
+                }
+              }
+            });
+          }
+        }, { onlyOnce: true });
+      }, 60000); // Her 60 saniyede bir temizle
+
+    } catch (error) {
+      console.error('Kullanıcı takibi hatası:', error);
+      // Hata olursa simüle moda geç
+      firebaseEnabled = false;
+      updateActiveUsers();
+    }
+  }
+
+  // Simüle kullanıcı sayısı (Firebase çalışmazsa)
+  function updateActiveUsers() {
+    const baseUsers = 15;
+    const randomVariation = Math.floor(Math.random() * 10) - 5;
+    const count = Math.max(1, baseUsers + randomVariation);
+    document.getElementById('activeUsers').textContent = count;
+  }
+
+  // Firebase varsa gerçek takip, yoksa simüle
+  if (firebaseEnabled) {
+    initializeRealUserTracking();
+  } else {
+    updateActiveUsers();
+    setInterval(updateActiveUsers, 30000);
+  }
+  </script>
+
   <script>
   let schedule = [];
   let yemekData = [];
   
   const ataturkSozleri = [
-    "Hayatta en hakiki mürşit ilimdir, fendir.",
-    "Bir milleti hür, müstakil, şanlı, yüksek bir toplum halinde yaşatmanın yegane vasıtası kültürdür.",
-    "Ey Türk gençliği! Birinci vazifen, Türk istiklalini, Türk Cumhuriyetini, ilelebet muhafaza ve müdafaa etmektir.",
-    "Eğitimde feda edilecek hiçbir şey yoktur.",
-    "Öğretmenler yeni neslin vücuda gelmesinde en birinci amil, en birinci mürebbidirler.",
-    "Ülkenin kurtuluşu ancak eğitimle mümkündür.",
-    "Türk milleti çalışkandır, zekidir, eğitim ve öğrenimle her türlü medeniyete layıktır.",
-    "Maarif davamız, asker, milletçe, her şeyimizle üstünde duracağımız meselelerdendir.",
-    "İlim ve teknikte ilerleme bütün olarak başarımızın en önemli kaynaklarındandır.",
-    "Kültürlü bir millet demek, aynı zamanda münevver bir millet demektir."
+    "Dün dündür, bugün bugün. Her gün yeni bir şeydir.",
+    "Sabret, acele etme. Bahar geldiğinde her şey güzel olacak.",
+    "Sevgi insanı olgunlaştırır, büyütür ve kemale erdirir.",
+    "Güneşin battığı yerde şafağı gördüm.",
+    "Hoş görü toplumların temelidir.",
+    "İnsan ya göründüğü gibidir ya da göründüğü gibi olur.",
+    "Bir mum binlerce mumu tutuşturur, kendisi de sönmez.",
+    "Acı da olsa tatlı da olsa, içinde gizli bir hikmet vardır.",
+    "İçindeki ateş sönerse, başkasını ısıtamazsın.",
+    "Sen ne ararsan osun. Eğer sevgi arıyorsan sevgisin, eğer acı arıyorsan acısın.",
+    "Dün geçmişin, yarın sırrın, bugün ise armağanın.",
+    "Kendi aklınla hareket et, başkalarının sözlerine değil."
   ];
 
   let currentSozIndex = 0;
   let sessionId = Math.random().toString(36).substring(7);
-  let activeUsersCount = 0;
 
   let startY = 0;
   let currentY = 0;
@@ -739,13 +871,6 @@
   document.addEventListener('touchstart', handleTouchStart, { passive: false });
   document.addEventListener('touchmove', handleTouchMove, { passive: false });
   document.addEventListener('touchend', handleTouchEnd);
-
-  function updateActiveUsers() {
-    const baseUsers = 15;
-    const randomVariation = Math.floor(Math.random() * 10) - 5;
-    activeUsersCount = Math.max(1, baseUsers + randomVariation);
-    document.getElementById('activeUsers').textContent = activeUsersCount;
-  }
 
   function updateCurrentDate() {
     const gunler = ['Pazar', 'Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi'];
@@ -820,7 +945,7 @@
     const sozElement = document.getElementById('currentSoz');
     sozElement.innerHTML = `
       <div>"${ataturkSozleri[currentSozIndex]}"</div>
-      <div class="soz-imza">Gazi Mustafa Kemal ATATÜRK</div>
+      <div class="soz-imza">Hz. Mevlana</div>
     `;
 
     setInterval(() => {
@@ -830,7 +955,7 @@
         currentSozIndex = (currentSozIndex + 1) % ataturkSozleri.length;
         sozElement.innerHTML = `
           <div>"${ataturkSozleri[currentSozIndex]}"</div>
-          <div class="soz-imza">Gazi Mustafa Kemal ATATÜRK</div>
+          <div class="soz-imza">Hz. Mevlana</div>
         `;
         sozElement.classList.add('active');
       }, 1000);
@@ -1094,11 +1219,9 @@
   loadMeals();
   loadNobetci();
   startAtaturkSozleri();
-  updateActiveUsers();
   updateCurrentDate();
   updateWeather();
   setInterval(updateClock, 1000);
-  setInterval(updateActiveUsers, 30000);
   setInterval(updateWeather, 600000);
 
   if ("serviceWorker" in navigator) {
