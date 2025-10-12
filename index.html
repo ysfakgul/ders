@@ -674,17 +674,15 @@
   import { getDatabase, ref, set, onValue, onDisconnect, serverTimestamp, remove } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js';
 
   // Firebase konfigürasyonu - KENDİ FIREBASE PROJENİZİN BİLGİLERİYLE DEĞİŞTİRİN
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyA7N0XuUcRi_gpgtRWa3UL7CEXXnnsRUcI",
-  authDomain: "mtal-school-app.firebaseapp.com",
-  databaseURL: "https://mtal-school-app-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "mtal-school-app",
-  storageBucket: "mtal-school-app.firebasestorage.app",
-  messagingSenderId: "948127446637",
-  appId: "1:948127446637:web:a7531c50613d3356e7b164",
-  measurementId: "G-FHBC6SMR60"
-};
+  const firebaseConfig = {
+    apiKey: "BURAYA-KENDI-API-KEY",
+    authDomain: "BURAYA-KENDI-AUTH-DOMAIN",
+    databaseURL: "BURAYA-KENDI-DATABASE-URL",
+    projectId: "BURAYA-KENDI-PROJECT-ID",
+    storageBucket: "BURAYA-KENDI-STORAGE-BUCKET",
+    messagingSenderId: "BURAYA-KENDI-SENDER-ID",
+    appId: "BURAYA-KENDI-APP-ID"
+  };
 
   // Firebase başlat
   let app, database, userRef;
@@ -802,20 +800,13 @@ const firebaseConfig = {
   <script>
   let schedule = [];
   let yemekData = [];
+  let egitimSozleri = [];
   
-  const ataturkSozleri = [
-    "Dün dündür, bugün bugün. Her gün yeni bir şeydir.",
-    "Sabret, acele etme. Bahar geldiğinde her şey güzel olacak.",
-    "Sevgi insanı olgunlaştırır, büyütür ve kemale erdirir.",
-    "Güneşin battığı yerde şafağı gördüm.",
-    "Hoş görü toplumların temelidir.",
-    "İnsan ya göründüğü gibidir ya da göründüğü gibi olur.",
-    "Bir mum binlerce mumu tutuşturur, kendisi de sönmez.",
-    "Acı da olsa tatlı da olsa, içinde gizli bir hikmet vardır.",
-    "İçindeki ateş sönerse, başkasını ısıtamazsın.",
-    "Sen ne ararsan osun. Eğer sevgi arıyorsan sevgisin, eğer acı arıyorsan acısın.",
-    "Dün geçmişin, yarın sırrın, bugün ise armağanın.",
-    "Kendi aklınla hareket et, başkalarının sözlerine değil."
+  // Varsayılan sözler (soz.json yüklenemezse kullanılacak)
+  const defaultSozler = [
+    { soz: "Eğitim, zihni aydınlatır ve kalbi ferahlatır.", yazar: "Aristoteles" },
+    { soz: "Eğitim, en güçlü silahtır ve dünyayı değiştirebilirsin.", yazar: "Nelson Mandela" },
+    { soz: "Eğitimin amacı, boş bir zihni açık bir zihne dönüştürmektir.", yazar: "Malcolm Forbes" }
   ];
 
   let currentSozIndex = 0;
@@ -941,21 +932,50 @@ const firebaseConfig = {
     }
   }
 
-  function startAtaturkSozleri() {
+  async function loadSozler() {
+    try {
+      console.log("Sözler yükleniyor...");
+      const response = await fetch("./soz.json?v=" + Date.now());
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
+      egitimSozleri = await response.json();
+      console.log("Sözler yüklendi:", egitimSozleri);
+      
+      if (!Array.isArray(egitimSozleri) || egitimSozleri.length === 0) {
+        throw new Error("Geçersiz sözler verisi");
+      }
+      
+      startSozleriGoster();
+    } catch (error) {
+      console.error("Sözler yükleme hatası:", error);
+      egitimSozleri = defaultSozler;
+      console.log("Varsayılan sözler kullanılıyor");
+      startSozleriGoster();
+    }
+  }
+
+  function startSozleriGoster() {
+    if (egitimSozleri.length === 0) {
+      egitimSozleri = defaultSozler;
+    }
+    
     const sozElement = document.getElementById('currentSoz');
     sozElement.innerHTML = `
-      <div>"${ataturkSozleri[currentSozIndex]}"</div>
-      <div class="soz-imza">Hz. Mevlana</div>
+      <div>"${egitimSozleri[currentSozIndex].soz}"</div>
+      <div class="soz-imza">${egitimSozleri[currentSozIndex].yazar}</div>
     `;
 
     setInterval(() => {
       sozElement.classList.remove('active');
       
       setTimeout(() => {
-        currentSozIndex = (currentSozIndex + 1) % ataturkSozleri.length;
+        currentSozIndex = (currentSozIndex + 1) % egitimSozleri.length;
         sozElement.innerHTML = `
-          <div>"${ataturkSozleri[currentSozIndex]}"</div>
-          <div class="soz-imza">Hz. Mevlana</div>
+          <div>"${egitimSozleri[currentSozIndex].soz}"</div>
+          <div class="soz-imza">${egitimSozleri[currentSozIndex].yazar}</div>
         `;
         sozElement.classList.add('active');
       }, 1000);
@@ -1218,7 +1238,7 @@ const firebaseConfig = {
   loadSchedule();
   loadMeals();
   loadNobetci();
-  startAtaturkSozleri();
+  loadSozler();
   updateCurrentDate();
   updateWeather();
   setInterval(updateClock, 1000);
