@@ -673,16 +673,18 @@
   let yemekData = [];
   
   const ataturkSozleri = [
-    "Hayatta en hakiki mürşit ilimdir, fendir.",
-    "Bir milleti hür, müstakil, şanlı, yüksek bir toplum halinde yaşatmanın yegane vasıtası kültürdür.",
-    "Ey Türk gençliği! Birinci vazifen, Türk istiklalini, Türk Cumhuriyetini, ilelebet muhafaza ve müdafaa etmektir.",
-    "Eğitimde feda edilecek hiçbir şey yoktur.",
-    "Öğretmenler yeni neslin vücuda gelmesinde en birinci amil, en birinci mürebbidirler.",
-    "Ülkenin kurtuluşu ancak eğitimle mümkündür.",
-    "Türk milleti çalışkandır, zekidir, eğitim ve öğrenimle her türlü medeniyete layıktır.",
-    "Maarif davamız, asker, milletçe, her şeyimizle üstünde duracağımız meselelerdendir.",
-    "İlim ve teknikte ilerleme bütün olarak başarımızın en önemli kaynaklarındandır.",
-    "Kültürlü bir millet demek, aynı zamanda münevver bir millet demektir."
+    "Dün dündür, bugün bugün. Her gün yeni bir şeydir.",
+    "Sabret, acele etme. Bahar geldiğinde her şey güzel olacak.",
+    "Sevgi insanı olgunlaştırır, büyütür ve kemale erdirir.",
+    "Güneşin battığı yerde şafağı gördüm.",
+    "Hoş görü toplumların temelidir.",
+    "İnsan ya göründüğü gibidir ya da göründüğü gibi olur.",
+    "Bir mum binlerce mumu tutuşturur, kendisi de sönmez.",
+    "Acı da olsa tatlı da olsa, içinde gizli bir hikmet vardır.",
+    "İçindeki ateş sönerse, başkasını ısıtamazsın.",
+    "Sen ne ararsan osun. Eğer sevgi arıyorsan sevgisin, eğer acı arıyorsan acısın.",
+    "Dün geçmişin, yarın sırrın, bugün ise armağanın.",
+    "Kendi aklınla hareket et, başkalarının sözlerine değil."
   ];
 
   let currentSozIndex = 0;
@@ -820,7 +822,7 @@
     const sozElement = document.getElementById('currentSoz');
     sozElement.innerHTML = `
       <div>"${ataturkSozleri[currentSozIndex]}"</div>
-      <div class="soz-imza">Gazi Mustafa Kemal ATATÜRK</div>
+      <div class="soz-imza">Hz. Mevlana</div>
     `;
 
     setInterval(() => {
@@ -830,7 +832,7 @@
         currentSozIndex = (currentSozIndex + 1) % ataturkSozleri.length;
         sozElement.innerHTML = `
           <div>"${ataturkSozleri[currentSozIndex]}"</div>
-          <div class="soz-imza">Gazi Mustafa Kemal ATATÜRK</div>
+          <div class="soz-imza">Hz. Mevlana</div>
         `;
         sozElement.classList.add('active');
       }, 1000);
