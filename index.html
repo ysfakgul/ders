@@ -648,6 +648,13 @@
     <div id="nobetci">
       <h4>👨‍🏫 Nöbetçi Müdür Yardımcısı</h4>
       <span id="nobetciAd"></span>
+      
+      <div id="ogretmenNobetleri" style="margin-top: 15px;">
+        <h5 style="color: var(--neon-color); margin-bottom: 10px; font-size: 1.1em;">📋 Bugünün Nöbetçi Öğretmenleri</h5>
+        <div id="ogretmenNobetListesi" style="text-align: left; padding: 0 10px;">
+          Yükleniyor...
+        </div>
+      </div>
     </div>
   </div>
 
@@ -1214,6 +1221,7 @@ const firebaseConfig = {
 
   async function loadNobetci() {
     try {
+      // Müdür yardımcısı bilgisini yükle
       const response = await fetch("nobet.json?v=5");
       const data = await response.json();
 
@@ -1231,9 +1239,40 @@ const firebaseConfig = {
       } else {
         nobetciAd.textContent = "Bilgi bulunamadı";
       }
+
+      // Öğretmen nöbetlerini yükle
+      const ogretmenResponse = await fetch("ogretmennobet.json?v=" + Date.now());
+      const ogretmenData = await ogretmenResponse.json();
+
+      const gunler = ['PAZAR', 'PAZARTESİ', 'SALI', 'ÇARŞAMBA', 'PERŞEMBE', 'CUMA', 'CUMARTESİ'];
+      const bugunGun = gunler[today.getDay()];
+
+      const bugunNobetler = ogretmenData.gunler.find(x => x.gun === bugunGun);
+      const ogretmenListesi = document.getElementById("ogretmenNobetListesi");
+
+      if (bugunNobetler && bugunNobetler.nobetler) {
+        let html = '<div style="display: grid; gap: 8px;">';
+        bugunNobetler.nobetler.forEach(nobet => {
+          html += `
+            <div style="background: rgba(255,255,255,0.08); padding: 10px; border-radius: 6px; border-left: 3px solid var(--neon-color);">
+              <div style="font-weight: 600; color: var(--neon-color); margin-bottom: 4px; font-size: 0.95em;">
+                📍 ${nobet.bolge}
+              </div>
+              <div style="color: white; font-size: 0.9em;">
+                ${nobet.ogretmenler.join(' & ')}
+              </div>
+            </div>
+          `;
+        });
+        html += '</div>';
+        ogretmenListesi.innerHTML = html;
+      } else {
+        ogretmenListesi.innerHTML = '<p style="color: #ccc; text-align: center;">Bugün için nöbet bilgisi bulunamadı.</p>';
+      }
     } catch (error) {
       console.error("Nöbetçi bilgisi yüklenemedi:", error);
       document.getElementById("nobetciAd").textContent = "Bilgi yüklenemedi";
+      document.getElementById("ogretmenNobetListesi").innerHTML = '<p style="color: #ccc; text-align: center;">Yükleme hatası</p>';
     }
   }
 

@@ -1,0 +1,309 @@
+{
+  "okulAdi": "Okul Nöbet Çizelgesi",
+  "gunler": [
+    {
+      "gun": "PAZARTESİ",
+      "nobetler": [
+        {
+          "bolge": "GİRİŞ KAPI",
+          "ogretmenler": [
+            "ÖMER AYGÜN"
+          ]
+        },
+        {
+          "bolge": "ELEKTRONİK PANSİYON",
+          "ogretmenler": [
+            "ERCAN ODA"
+          ]
+        },
+        {
+          "bolge": "SPOR SALONU SAHA TESİSAT",
+          "ogretmenler": [
+            "DERVİŞ ALİ AKAN",
+            "ERDAL KARADAĞ"
+          ]
+        },
+        {
+          "bolge": "İNŞAAT ANABİNA ÇEVRESİ",
+          "ogretmenler": [
+            "SELÇUK YILMAZ",
+            "TÜRKAN YILMAZ"
+          ]
+        },
+        {
+          "bolge": "ZEMİNKAT KANTİN",
+          "ogretmenler": [
+            "YUSUF AKGÜL"
+          ]
+        },
+        {
+          "bolge": "2. KAT GÜNEY",
+          "ogretmenler": [
+            "ŞAZİYE KIZILASLAN"
+          ]
+        },
+        {
+          "bolge": "2.KAT KUZEY",
+          "ogretmenler": [
+            "FEYZA TELLİ",
+            "YUSUF ALKIŞ"
+          ]
+        },
+        {
+          "bolge": "3.KAT KUZEY",
+          "ogretmenler": [
+            "NEBİ SOYLU"
+          ]
+        },
+        {
+          "bolge": "3.KAT GÜNEY",
+          "ogretmenler": [
+            "BAKİ ŞİŞMAN"
+          ]
+        }
+      ]
+    },
+    {
+      "gun": "SALI",
+      "nobetler": [
+        {
+          "bolge": "GİRİŞ KAPI",
+          "ogretmenler": [
+            "MEHMET ALPER AKAY",
+            "MURAT ARICAN"
+          ]
+        },
+        {
+          "bolge": "ELEKTRONİK PANSİYON",
+          "ogretmenler": [
+            "YENER YÜZÜAK",
+            "SEDAT İNCİ"
+          ]
+        },
+        {
+          "bolge": "SPOR SALONU SAHA TESİSAT",
+          "ogretmenler": [
+            "SEFA KARAKÖSE"
+          ]
+        },
+        {
+          "bolge": "İNŞAAT ANABİNA ÇEVRESİ",
+          "ogretmenler": [
+            "ERHAN YILDIZHAN"
+          ]
+        },
+        {
+          "bolge": "ZEMİNKAT KANTİN",
+          "ogretmenler": [
+            "SELCAN YALKIZIMI"
+          ]
+        },
+        {
+          "bolge": "2. KAT GÜNEY",
+          "ogretmenler": [
+            "YAKUP YAŞAR"
+          ]
+        },
+        {
+          "bolge": "2.KAT KUZEY",
+          "ogretmenler": [
+            "BERATİYE KARACA",
+            "CANSU HORASAN"
+          ]
+        },
+        {
+          "bolge": "3.KAT KUZEY",
+          "ogretmenler": [
+            "YELİZ AKSOY"
+          ]
+        },
+        {
+          "bolge": "3.KAT GÜNEY",
+          "ogretmenler": [
+            "YILMAZ ŞİRİN",
+            "ÖZLEM UZUN"
+          ]
+        }
+      ]
+    },
+    {
+      "gun": "ÇARŞAMBA",
+      "nobetler": [
+        {
+          "bolge": "GİRİŞ KAPI",
+          "ogretmenler": [
+            "MUHAMMET DERİN"
+          ]
+        },
+        {
+          "bolge": "ELEKTRONİK PANSİYON",
+          "ogretmenler": [
+            "ERCAN ALPTEKER"
+          ]
+        },
+        {
+          "bolge": "SPOR SALONU SAHA TESİSAT",
+          "ogretmenler": [
+            "ABDURRAHMAN KOCADAĞ"
+          ]
+        },
+        {
+          "bolge": "İNŞAAT ANABİNA ÇEVRESİ",
+          "ogretmenler": [
+            "SAFFET ÇAKIR"
+          ]
+        },
+        {
+          "bolge": "ZEMİNKAT KANTİN",
+          "ogretmenler": [
+            "HASAN ÇİÇEK"
+          ]
+        },
+        {
+          "bolge": "2. KAT GÜNEY",
+          "ogretmenler": [
+            "ADEM ÇAY"
+          ]
+        },
+        {
+          "bolge": "2.KAT KUZEY",
+          "ogretmenler": [
+            "OSMAN YALÇIN"
+          ]
+        },
+        {
+          "bolge": "3.KAT KUZEY",
+          "ogretmenler": [
+            "RECEP ARTIK"
+          ]
+        },
+        {
+          "bolge": "3.KAT GÜNEY",
+          "ogretmenler": [
+            "M.GAMZE GÖKMEN"
+          ]
+        }
+      ]
+    },
+    {
+      "gun": "PERŞEMBE",
+      "nobetler": [
+        {
+          "bolge": "GİRİŞ KAPI",
+          "ogretmenler": [
+            "SERKAN TANZER"
+          ]
+        },
+        {
+          "bolge": "ELEKTRONİK PANSİYON",
+          "ogretmenler": [
+            "MUSTAFA YILDIZ",
+            "ENDER AKBAŞ"
+          ]
+        },
+        {
+          "bolge": "SPOR SALONU SAHA TESİSAT",
+          "ogretmenler": [
+            "SERKAN TRABZON"
+          ]
+        },
+        {
+          "bolge": "İNŞAAT ANABİNA ÇEVRESİ",
+          "ogretmenler": [
+            "SUAT ALTOK"
+          ]
+        },
+        {
+          "bolge": "ZEMİNKAT KANTİN",
+          "ogretmenler": [
+            "YUSUF ÖRENÇ"
+          ]
+        },
+        {
+          "bolge": "2. KAT GÜNEY",
+          "ogretmenler": [
+            "AYŞE ÇAKIR"
+          ]
+        },
+        {
+          "bolge": "2.KAT KUZEY",
+          "ogretmenler": [
+            "VEFA YAVUZYİĞİTOĞLU"
+          ]
+        },
+        {
+          "bolge": "3.KAT KUZEY",
+          "ogretmenler": [
+            "FAHRİYE AYDEMİR"
+          ]
+        },
+        {
+          "bolge": "3.KAT GÜNEY",
+          "ogretmenler": [
+            "SEDEF DEMİR SANÇAR"
+          ]
+        }
+      ]
+    },
+    {
+      "gun": "CUMA",
+      "nobetler": [
+        {
+          "bolge": "GİRİŞ KAPI",
+          "ogretmenler": [
+            "GÜVEN SARI"
+          ]
+        },
+        {
+          "bolge": "ELEKTRONİK PANSİYON",
+          "ogretmenler": [
+            "SÜLEYMAN AYDOĞAN"
+          ]
+        },
+        {
+          "bolge": "SPOR SALONU SAHA TESİSAT",
+          "ogretmenler": [
+            "ALİ MURAT ÇEKER"
+          ]
+        },
+        {
+          "bolge": "İNŞAAT ANABİNA ÇEVRESİ",
+          "ogretmenler": [
+            "BERAT UZUN"
+          ]
+        },
+        {
+          "bolge": "ZEMİNKAT KANTİN",
+          "ogretmenler": [
+            "GÜRHAN ÇERKEZ"
+          ]
+        },
+        {
+          "bolge": "2. KAT GÜNEY",
+          "ogretmenler": [
+            "SÜMEYRA TÜRKER"
+          ]
+        },
+        {
+          "bolge": "2.KAT KUZEY",
+          "ogretmenler": [
+            "ŞEYMA BERİL ER"
+          ]
+        },
+        {
+          "bolge": "3.KAT KUZEY",
+          "ogretmenler": [
+            "İLKNUR KIBRIS"
+          ]
+        },
+        {
+          "bolge": "3.KAT GÜNEY",
+          "ogretmenler": [
+            "SELMA GÜNBİLEK",
+            "ERCAN BALCI"
+          ]
+        }
+      ]
+    }
+  ]
+}
