@@ -1252,7 +1252,24 @@ const firebaseConfig = {
 
       if (bugunNobetler && bugunNobetler.nobetler) {
         let html = '<div style="display: grid; gap: 8px;">';
+        
+        // 2. ve 3. kat bölgelerini ayır
+        const ikinciKatBolgeler = [];
+        const ucuncuKatBolgeler = [];
+        const digerBolgeler = [];
+        
         bugunNobetler.nobetler.forEach(nobet => {
+          if (nobet.bolge.includes('2.KAT') || nobet.bolge.includes('2. KAT')) {
+            ikinciKatBolgeler.push(nobet);
+          } else if (nobet.bolge.includes('3.KAT')) {
+            ucuncuKatBolgeler.push(nobet);
+          } else {
+            digerBolgeler.push(nobet);
+          }
+        });
+        
+        // Önce diğer bölgeleri göster
+        digerBolgeler.forEach(nobet => {
           html += `
             <div style="background: rgba(255,255,255,0.08); padding: 10px; border-radius: 6px; border-left: 3px solid var(--neon-color);">
               <div style="font-weight: 600; color: var(--neon-color); margin-bottom: 4px; font-size: 0.95em;">
@@ -1264,6 +1281,43 @@ const firebaseConfig = {
             </div>
           `;
         });
+        
+        // 2. Kat bölgelerini yan yana göster
+        if (ikinciKatBolgeler.length > 0) {
+          html += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">';
+          ikinciKatBolgeler.forEach(nobet => {
+            html += `
+              <div style="background: rgba(255,255,255,0.08); padding: 10px; border-radius: 6px; border-left: 3px solid var(--neon-color);">
+                <div style="font-weight: 600; color: var(--neon-color); margin-bottom: 4px; font-size: 0.95em;">
+                  📍 ${nobet.bolge}
+                </div>
+                <div style="color: white; font-size: 0.9em;">
+                  ${nobet.ogretmenler.join(' & ')}
+                </div>
+              </div>
+            `;
+          });
+          html += '</div>';
+        }
+        
+        // 3. Kat bölgelerini yan yana göster
+        if (ucuncuKatBolgeler.length > 0) {
+          html += '<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">';
+          ucuncuKatBolgeler.forEach(nobet => {
+            html += `
+              <div style="background: rgba(255,255,255,0.08); padding: 10px; border-radius: 6px; border-left: 3px solid var(--neon-color);">
+                <div style="font-weight: 600; color: var(--neon-color); margin-bottom: 4px; font-size: 0.95em;">
+                  📍 ${nobet.bolge}
+                </div>
+                <div style="color: white; font-size: 0.9em;">
+                  ${nobet.ogretmenler.join(' & ')}
+                </div>
+              </div>
+            `;
+          });
+          html += '</div>';
+        }
+        
         html += '</div>';
         ogretmenListesi.innerHTML = html;
       } else {
